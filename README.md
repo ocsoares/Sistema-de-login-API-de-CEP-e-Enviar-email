@@ -1,0 +1,1 @@
+Baixar e colocar nessa Pasta a Instalação de Font Awesome, atentando ao nome do stylesheet css no HTML !! 

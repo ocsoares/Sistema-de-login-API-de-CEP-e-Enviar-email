@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!-- Adicionei type="text/css" por causa do Express !! <<  -->
+    <link rel="stylesheet" type="text/css" href="css/styles.css"> <!-- TIRAR o /src/public/ por causa do Express (esse Caminho JÁ está em app.ts) !! -->
+    <link rel="stylesheet" type="text/css" href="css/all.min.css"> <!-- TIRAR a /fontawesome-free-6.1.2-web/ por causa do Express (mesma coisa de emcima) !! -->
+
+    <title>Sistema de login</title>
+</head>
+<body>
+    <form id="form" method="post">
+        <h3 id="register">Registrar</h3>
+        
+        <div class="form-input">
+            <span class=icon><i class="fa fa-light fa-user"></i></span>
+            <label>Nome de usuário</label>
+            <input type="text" name="username" id="username" placeholder="Digite seu usuário" required>
+            <small>Usuário inválido !</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <div class="form-input">    
+            <span class="icon"><i class="fa fa-duotone fa-envelope"></i></i></span> <!-- o <i> DENTRO do <span-->  <!-- Colocar >fa< no começo para Desbugar !! -->
+            <label>Email</label>
+            <input type="text" name="email" id="email" placeholder="Digite seu email" required>
+            <small>Mensagem de erro</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+        
+        <div class="form-input">
+            <span class="icon"><i class="fa fa-light fa-id-card"></i></span>
+            <label>CPF</label>
+            <input type="text" name="cpf" id="cpf" placeholder="Digite seu CPF" minlength="14" maxlength="14" required/>
+            <!-- <input type="number" name="cep" id="cep" placeholder="Digite seu CEP" required/> O type number NÃO tem min/max length, ele tem min/max !! -->
+            <small>Mensagem de erro</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <div class="form-input">
+            <span class="icon"><i class="fa-solid fa-location-dot"></i></span>
+            <label>CEP</label>
+            <input type="text" name="cep" id="cep" placeholder="Digite seu CEP" minlength="9" maxlength="9" required/>
+            <small>Mensagem de erro</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <div class="form-input">
+            <span class="icon"><i class="fa fa-duotone fa-key"></i></span>
+            <label>Senha</label>
+            <input type="password" name="password" id="password" placeholder="Digite sua senha" minlength="7" required/>
+            <small>Mensagem de erro</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <div class="form-input"> <!-- TIREI o id="password-confirmation" porque estava dando UNDEFINED !! << -->
+            <span class="icon"><i class="fa fa-duotone fa-key"></i></span>
+            <label>Confirme sua senha</label>
+            <input type="password" name="passwordConfirmation" id="password-confirmation" placeholder="Confirme sua senha" required/>
+            <small>Mensagem de erro</small>
+            <span class="icon-check-input">
+                <i class="fas fa-exclamation-circle"></i>
+                <i class="fas fa-check-circle"></i>
+            </span>
+        </div>
+
+        <button type="submit" id="send">Registrar</button> <!-- Para poder colocar Verificações no HTML, como 'max', 'min' etc o Enviar TEM que SER type="submit" !! << -->
+        
+    </form>
+
+    <script src="https://kit.fontawesome.com/3421a87806.js"></script> <!-- Script do Font Awesome -->
+    <script src="build/build.js"></script> <!-- Script do Javascript utilizado para a API !! --> <!-- TIREI o /dist/ por Causa do Express (Igual com o CSS !!) -->
+</body>
+</html>
