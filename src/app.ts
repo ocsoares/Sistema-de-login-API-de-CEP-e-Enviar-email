@@ -31,7 +31,6 @@ AppDataSource.initialize().then(() => {
     const port = 5000;
 
     const __dirname = path.resolve();
-    
     server.use(cors());
     server.use(express.json());
     server.use(express.urlencoded({extended: true}));
