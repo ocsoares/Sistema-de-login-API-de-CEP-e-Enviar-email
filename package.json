@@ -5,7 +5,7 @@
   "main": "src/app.ts",
   "scripts": {
     "tscdir": "tsc -w --outDir dist",
-    "start": "nodemon ./dist/app.js",
+    "start": "node ./dist/app.js",
     "migration:generate": "typeorm-ts-node-commonjs -d ./src/database.ts migration:generate ./src/database/src/migration/default",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/database.ts migration:run"
   },
