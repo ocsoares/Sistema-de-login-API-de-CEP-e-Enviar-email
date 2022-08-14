@@ -44,7 +44,7 @@ AppDataSource.initialize().then(() => {
 
     server.use(errorMiddleware);
 
-    return server.listen(port, () => {
+    return server.listen(process.env.PORT || port, () => {
         console.log(`Servidor online na rota: ${host}:${port} !`);
     })
 })

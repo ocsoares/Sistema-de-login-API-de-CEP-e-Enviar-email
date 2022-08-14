@@ -25,7 +25,7 @@ database_1.AppDataSource.initialize().then(function () {
     server.use(html_pages_route_1.default);
     server.use(check_status_route_1.default);
     server.use(error_middleware_1.errorMiddleware);
-    return server.listen(port, function () {
+    return server.listen(process.env.PORT || port, function () {
         console.log("Servidor online na rota: ".concat(host, ":").concat(port, " !"));
     });
 });
