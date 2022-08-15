@@ -24,6 +24,7 @@ const htmlPageRoute = Router();
 
 htmlPageRoute.use(teste({
     secret: process.env.SESSION_SECRET,
+    keys: [process.env.SESSION_SECRET as string]
 }))
 
 // htmlPageRoute.use(session({
