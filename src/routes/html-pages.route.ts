@@ -1,12 +1,10 @@
 import { Request, Response, Router } from "express";
 import path from "path";
-import session from 'express-session'
+import session from 'cookie-session'
 import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
 import { sendNodemailer } from "../scripts/nodemailer-script";
-import { AppDataSource } from "../database";
-import { TypeormStore } from "connect-typeorm/out";
 
 const __dirname = path.resolve()
 const registerHTML = path.join(__dirname, '/src/html/register.html'); 
@@ -14,26 +12,32 @@ const registerSuccessufullHTML = path.join(__dirname, '/src/html/registerSuccess
 const loginHTML = path.join(__dirname, '/src/html/login.html');
 const homeHTML = path.join(__dirname, '/src/html/home.html');
 const logoutHTML = path.join(__dirname, 'src/html/logout.html');
+const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
 
 const htmlPageRoute = Router();
-
-htmlPageRoute.use(session({
-    secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    cookie: {
-        secure: false,
-        maxAge: 60000
-    },
-    resave: true, // Coloquei assim para Evitar um Erro << 
-    saveUninitialized: true // Coloquei assim para Evitar um Erro << 
-}))
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
 
-htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <<
+// Procurar sobre views (EJS, engine) DEPOIS !! <<
+
+    // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
+htmlPageRoute.use(session({
+    // name:    <- O name PADRÃO é session !! <<  
+    secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
+    keys: [process.env.SESSION_SECRET as string],
+    
+    // cookie: {
+    //     secure: false,
+    //     maxAge: 60000
+    // },
+    // resave: true, // Coloquei assim para Evitar um Erro << 
+    // saveUninitialized: true // Coloquei assim para Evitar um Erro << 
+}))
+
+htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
-    console.log('Req.session.login NA HOME:', req.session.login)
     res.sendFile(homeHTML);
 })
 
@@ -46,10 +50,8 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    if(req.session.login){
-        console.log('Req session COMPLETO:', req.session)
-        console.log('Req sessio login:', req.session.login);
-        res.redirect('/')
+    if(req.session?.login){
+        res.redirect('/dashboard');
     }
     else{
         res.sendFile(loginHTML);
@@ -59,11 +61,25 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
 })
 
+htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
+    if(req.session?.login){
+        res.sendFile(dashboardHTML);
+    }
+    else{
+        res.redirect('/login');
+    }
+})
+
     // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
 htmlPageRoute.get('/logout', (req: Request, res: Response) => {
-    if(req.session.login){
-        req.session.destroy(req.session.login);
+    if(req.session?.login){
+        res.clearCookie('session'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
         res.sendFile(logoutHTML);
+        
+        setInterval(() => { // Coloquei isso aqui porque o res.sendFile é ASSÍNCRONO, e o res.end é SÍNCRONO, então Sempre Executava res.end ANTES do res.sendFile e bugava !! <<<
+            res.end() // Impede que qualquer OUTRO dado seja escrito (pelo oq entendi...)
+        }, 25)
+        
     }
 
     else{
@@ -73,8 +89,8 @@ htmlPageRoute.get('/logout', (req: Request, res: Response) => {
 })
 
 htmlPageRoute.get('/email', (req: Request, res: Response) => {
-    if(req.session.login){
-        res.json({message: 'EXISTE !', session: req.session.login});
+    if(req.session?.login){
+        res.json({name: req.session.login.username, email: req.session.login.email});
     }
     else{
         res.redirect('/login');

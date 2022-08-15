@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken'
 import { sendNodemailer } from "../scripts/nodemailer-script";
 
 const __dirname = path.resolve()
-const loggedHTML = path.join(__dirname, '/src/html/loginSuccessufull.html');
+// const loggedHTML = path.join(__dirname, '/src/html/loginSuccessufull.html');
 const loginErrorHTML = path.join(__dirname, '/src/html/loginError.html');
 
 // >>> IMPORTANTÍSSIMO: Por algum motivo, tem DOIS Request e Response, um são do Express e o outro ACHO que é do bodyParser (NA ROTA), então NÃO ESTAVA pe-
@@ -103,16 +103,18 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchEmail;
 
-        req.session.login = finalLogin
+        if(req.session){
+            req.session.login = finalLogin
+        }
 
-        res.sendFile(loggedHTML);
+        res.redirect('/dashboard');
 
         next();
     }
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session.login){
+        if(req.session?.login){
             
             const JWT = jwt.sign({
                 id: req.session.login.id,
@@ -135,7 +137,7 @@ export class HTMLAccountController {
     }
 
     async verifyJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session.login){
+        if(req.session?.login){
             const { JWTObject } = req.params
 
             const JWT = JWTObject.split(' ')[0]
