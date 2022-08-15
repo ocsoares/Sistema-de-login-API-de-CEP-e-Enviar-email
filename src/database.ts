@@ -5,6 +5,8 @@ import { DataSource } from 'typeorm'
 // ALERTA: MUDEI DE Login-system  PARA  login-system   (l minúsculo) PARA VER SE PEGA !!! <<
 //  OBS: no .env Também !! <<
 
+// Adicionei # TYPE DATABASE USER CIDR-ADDRESS  METHOD // host  all  all 0.0.0.0/0 md5 no pg_hba.conf !! <<
+
 export const AppDataSource = new DataSource({
     type: 'postgres',
     url: process.env.DATABASE_URL,

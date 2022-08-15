@@ -102,7 +102,7 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchEmail;
 
-        req.session.login = finalLogin
+        req.session = finalLogin
 
         res.sendFile(loggedHTML);
 
@@ -111,12 +111,12 @@ export class HTMLAccountController {
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session.login){
+        if(req.session){
             
             const JWT = jwt.sign({
-                id: req.session.login.id,
-                username: req.session.login.username,
-                email: req.session.login.email
+                id: req.session.id,
+                username: req.session.username,
+                email: req.session.email
             }, process.env.JWT_HASH ?? '', {
                 expiresIn: '12h'
             })
@@ -134,7 +134,7 @@ export class HTMLAccountController {
     }
 
     async verifyJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session.login){
+        if(req.session){
             const { JWTObject } = req.params
 
             const JWT = JWTObject.split(' ')[0]

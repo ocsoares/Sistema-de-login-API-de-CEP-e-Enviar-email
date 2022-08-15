@@ -164,7 +164,7 @@ var HTMLAccountController = (function () {
                             return [2, res.sendFile(loginErrorHTML)];
                         }
                         _ = searchEmail.password, finalLogin = __rest(searchEmail, ["password"]);
-                        req.session.login = finalLogin;
+                        req.session = finalLogin;
                         res.sendFile(loggedHTML);
                         next();
                         return [2];
@@ -177,11 +177,11 @@ var HTMLAccountController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var JWT;
             return __generator(this, function (_b) {
-                if (req.session.login) {
+                if (req.session) {
                     JWT = jsonwebtoken_1.default.sign({
-                        id: req.session.login.id,
-                        username: req.session.login.username,
-                        email: req.session.login.email
+                        id: req.session.id,
+                        username: req.session.username,
+                        email: req.session.email
                     }, (_a = process.env.JWT_HASH) !== null && _a !== void 0 ? _a : '', {
                         expiresIn: '12h'
                     });
@@ -201,7 +201,7 @@ var HTMLAccountController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var JWTObject, JWT, verifyJWT;
             return __generator(this, function (_b) {
-                if (req.session.login) {
+                if (req.session) {
                     JWTObject = req.params.JWTObject;
                     JWT = JWTObject.split(' ')[0];
                     try {

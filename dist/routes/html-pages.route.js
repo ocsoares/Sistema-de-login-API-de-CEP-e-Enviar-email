@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var path_1 = __importDefault(require("path"));
-var express_session_1 = __importDefault(require("express-session"));
+var cookie_session_1 = __importDefault(require("cookie-session"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var HTMLAccountController_1 = require("../controllers/HTMLAccountController");
 var axios_script_1 = require("../scripts/axios-script");
@@ -14,17 +14,15 @@ var __dirname = path_1.default.resolve();
 var registerHTML = path_1.default.join(__dirname, '/src/html/register.html');
 var registerSuccessufullHTML = path_1.default.join(__dirname, '/src/html/registerSuccessufull.html');
 var loginHTML = path_1.default.join(__dirname, '/src/html/login.html');
-var loggedHTML = path_1.default.join(__dirname, '/src/html/loginSuccessufull.html');
 var homeHTML = path_1.default.join(__dirname, '/src/html/home.html');
 var logoutHTML = path_1.default.join(__dirname, 'src/html/logout.html');
 var htmlPageRoute = (0, express_1.Router)();
-htmlPageRoute.use((0, express_session_1.default)({
+htmlPageRoute.use((0, cookie_session_1.default)({
     secret: process.env.SESSION_SECRET,
-    resave: true,
-    saveUninitialized: true
 }));
 htmlPageRoute.use(body_parser_1.default.urlencoded({ extended: true }));
 htmlPageRoute.get('/', function (req, res) {
+    console.log('REQ SESSION:', req.session);
     res.sendFile(homeHTML);
 });
 htmlPageRoute.get('/register', function (req, res) {
@@ -34,7 +32,7 @@ htmlPageRoute.post('/register', new HTMLAccountController_1.HTMLAccountControlle
     res.sendFile(registerSuccessufullHTML);
 });
 htmlPageRoute.get('/login', function (req, res) {
-    if (req.session.login) {
+    if (req.session) {
         res.redirect('/');
     }
     else {
@@ -44,8 +42,8 @@ htmlPageRoute.get('/login', function (req, res) {
 htmlPageRoute.post('/login', new HTMLAccountController_1.HTMLAccountController().loginAccountHTML, function (req, res) {
 });
 htmlPageRoute.get('/logout', function (req, res) {
-    if (req.session.login) {
-        req.session.destroy(req.session.login);
+    if (req.session) {
+        req.session.destroy(req.session);
         res.sendFile(logoutHTML);
     }
     else {
@@ -53,8 +51,8 @@ htmlPageRoute.get('/logout', function (req, res) {
     }
 });
 htmlPageRoute.get('/email', function (req, res) {
-    if (req.session.login) {
-        res.json({ message: 'EXISTE !', session: req.session.login });
+    if (req.session) {
+        res.json({ message: 'EXISTE !', session: req.session });
     }
     else {
         res.redirect('/login');

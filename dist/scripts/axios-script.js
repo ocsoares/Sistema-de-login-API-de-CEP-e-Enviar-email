@@ -17,8 +17,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.runAxios = void 0;
 var axios_1 = __importDefault(require("axios"));
 var runAxios = function () { return function (req, res, next) {
-    if (req.session.login) {
-        var getCEPValue = req.session.login.cep.replace('-', '');
+    if (req.session) {
+        var getCEPValue = req.session.cep.replace('-', '');
         var url = "https://viacep.com.br/ws/".concat(getCEPValue, "/json");
         axios_1.default.get(url)
             .then(function (resAxios) {
