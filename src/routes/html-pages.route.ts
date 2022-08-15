@@ -24,7 +24,7 @@ const htmlPageRoute = Router();
 
 htmlPageRoute.use(teste({
     secret: process.env.SESSION_SECRET,
-    keys: [process.env.SESSION_SECRET as string]
+    keys: [process.env.SESSION_SECRET as string] // TIVE que por isso para Conectar no Heruku !! <<
 }))
 
 // htmlPageRoute.use(session({
