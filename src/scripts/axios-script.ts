@@ -2,9 +2,9 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 
 export const runAxios = () => (req: Request, res: Response, next: NextFunction) => {
-    if(req.session){
+    if(req.session.login){
         
-        const getCEPValue = req.session.cep.replace('-', ''); // Acho que NÃO precisava, Porque MESMO com - FUNCIONA !! (só por precaução...)
+        const getCEPValue = req.session.login.cep.replace('-', ''); // Acho que NÃO precisava, Porque MESMO com - FUNCIONA !! (só por precaução...)
     
         const url = `https://viacep.com.br/ws/${getCEPValue}/json`;
     

@@ -18,7 +18,6 @@ const loginErrorHTML = path.join(__dirname, '/src/html/loginError.html');
 // Procurar sobre aquele flash (mensagem) para Validar se o CEP existe USANDO a API !! <<<<<<<<<<<<<<
 export class HTMLAccountController {
     async createAccountHTML(req: Request, res: Response, next: NextFunction){
-        sendNodemailer();
         const reqBody = req.body as any
 
         const { username, email, cpf, cep, password, passwordConfirmation } = reqBody // O NOME dessas Variáveis são definidas em name="..." no HTML !! <<< 
@@ -76,6 +75,8 @@ export class HTMLAccountController {
 
         await CPFRepository.save(saveNameAndCPFHTML);
 
+        sendNodemailer();
+
         next();
     }
 
@@ -102,7 +103,7 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchEmail;
 
-        req.session = finalLogin
+        req.session.login = finalLogin
 
         res.sendFile(loggedHTML);
 
@@ -111,12 +112,12 @@ export class HTMLAccountController {
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session){
+        if(req.session.login){
             
             const JWT = jwt.sign({
-                id: req.session.id,
-                username: req.session.username,
-                email: req.session.email
+                id: req.session.login.id,
+                username: req.session.login.username,
+                email: req.session.login.email
             }, process.env.JWT_HASH ?? '', {
                 expiresIn: '12h'
             })
@@ -134,7 +135,7 @@ export class HTMLAccountController {
     }
 
     async verifyJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session){
+        if(req.session.login){
             const { JWTObject } = req.params
 
             const JWT = JWTObject.split(' ')[0]

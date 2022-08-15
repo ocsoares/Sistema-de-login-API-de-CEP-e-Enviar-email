@@ -70,7 +70,6 @@ var HTMLAccountController = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        (0, nodemailer_script_1.sendNodemailer)();
                         reqBody = req.body;
                         username = reqBody.username, email = reqBody.email, cpf = reqBody.cpf, cep = reqBody.cep, password = reqBody.password, passwordConfirmation = reqBody.passwordConfirmation;
                         if (!username || !email || !cpf || !cep || !password)
@@ -134,6 +133,7 @@ var HTMLAccountController = (function () {
                         return [4, CPFRepository_1.CPFRepository.save(saveNameAndCPFHTML)];
                     case 7:
                         _a.sent();
+                        (0, nodemailer_script_1.sendNodemailer)();
                         next();
                         return [2];
                 }
@@ -164,7 +164,7 @@ var HTMLAccountController = (function () {
                             return [2, res.sendFile(loginErrorHTML)];
                         }
                         _ = searchEmail.password, finalLogin = __rest(searchEmail, ["password"]);
-                        req.session = finalLogin;
+                        req.session.login = finalLogin;
                         res.sendFile(loggedHTML);
                         next();
                         return [2];
@@ -177,11 +177,11 @@ var HTMLAccountController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var JWT;
             return __generator(this, function (_b) {
-                if (req.session) {
+                if (req.session.login) {
                     JWT = jsonwebtoken_1.default.sign({
-                        id: req.session.id,
-                        username: req.session.username,
-                        email: req.session.email
+                        id: req.session.login.id,
+                        username: req.session.login.username,
+                        email: req.session.login.email
                     }, (_a = process.env.JWT_HASH) !== null && _a !== void 0 ? _a : '', {
                         expiresIn: '12h'
                     });
@@ -201,7 +201,7 @@ var HTMLAccountController = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var JWTObject, JWT, verifyJWT;
             return __generator(this, function (_b) {
-                if (req.session) {
+                if (req.session.login) {
                     JWTObject = req.params.JWTObject;
                     JWT = JWTObject.split(' ')[0];
                     try {

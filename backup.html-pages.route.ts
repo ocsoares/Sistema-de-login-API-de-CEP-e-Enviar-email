@@ -1,10 +1,17 @@
 import { Request, Response, Router } from "express";
 import path from "path";
-import session from 'express-session'
+import teste from 'cookie-session'
 import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
 import { sendNodemailer } from "../scripts/nodemailer-script";
+
+// import session from 'cookie-session' Tentar esse <<< ao invés de express-session (TEM QUE MUDAR OS req.session.login ) !! <<
+//  OU ACHAR OUTRA SOLUÇÃO.
+
+// Fazer uma Rota de EXCLUIR a Conta usando as Informações da Sessão
+
+// >>> Fazer um HTML explicando as Rotas Disponíveis QUANDO LOGADO !! <<
 
 const __dirname = path.resolve()
 const registerHTML = path.join(__dirname, '/src/html/register.html'); 
@@ -15,11 +22,17 @@ const logoutHTML = path.join(__dirname, 'src/html/logout.html');
 
 const htmlPageRoute = Router();
 
-htmlPageRoute.use(session({
-    secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    resave: true, // Coloquei assim para Evitar um Erro << 
-    saveUninitialized: true // Coloquei assim para Evitar um Erro << 
+htmlPageRoute.use(teste({
+    secret: process.env.SESSION_SECRET,
+    keys: [process.env.SESSION_SECRET as string] // TIVE que por isso para Conectar no Heruku !! <<
 }))
+
+// htmlPageRoute.use(session({
+//     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
+//     resave: true, // Coloquei assim para Evitar um Erro << 
+//     saveUninitialized: true // Coloquei assim para Evitar um Erro << 
+// }))
+
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
@@ -27,7 +40,7 @@ htmlPageRoute.use(session({
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <<
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
-    console.log('Req.session.login NA HOME:', req.session.login)
+    console.log('REQ SESSION:', req.session); // ACHO QUE DEU CERTO !! <<
     res.sendFile(homeHTML);
 })
 
@@ -40,9 +53,7 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    if(req.session.login){
-        console.log('Req session COMPLETO:', req.session)
-        console.log('Req sessio login:', req.session.login);
+    if(req.session){
         res.redirect('/')
     }
     else{
@@ -55,8 +66,8 @@ htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any
 
     // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
 htmlPageRoute.get('/logout', (req: Request, res: Response) => {
-    if(req.session.login){
-        req.session.destroy(req.session.login);
+    if(req.session){
+        req.session.destroy(req.session);
         res.sendFile(logoutHTML);
     }
 
@@ -67,8 +78,8 @@ htmlPageRoute.get('/logout', (req: Request, res: Response) => {
 })
 
 htmlPageRoute.get('/email', (req: Request, res: Response) => {
-    if(req.session.login){
-        res.json({message: 'EXISTE !', session: req.session.login});
+    if(req.session){
+        res.json({message: 'EXISTE !', session: req.session});
     }
     else{
         res.redirect('/login');
