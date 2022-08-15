@@ -38,11 +38,13 @@ AppDataSource.initialize().then(() => {
     server.use(express.static(__dirname + '/fontawesome-free-6.1.2-web/')) // CSS do Diretório: /fontawesome-free-6.1.2-web/css/all.min.css"
     server.use(express.static(__dirname + '/dist'))
     
+    server.set('trust proxy', 1);  // Pro Heroku << !!
+
     server.use(htmlPageRoute);
     server.use(checkStatusRoute);
     // server.use(crudRoute); POR ENQUANTO vou deixar isso Comentado, porque irei mexer APENAS com a Rota de HTML !! <<
 
-    server.use(errorMiddleware);
+    // server.use(errorMiddleware);
 
     return server.listen(process.env.PORT || port, () => {
         console.log(`Servidor online na rota: ${host}:${port} !`);

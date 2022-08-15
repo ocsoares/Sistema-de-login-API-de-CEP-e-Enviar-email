@@ -5,6 +5,8 @@ import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
 import { sendNodemailer } from "../scripts/nodemailer-script";
+import { AppDataSource } from "../database";
+import { TypeormStore } from "connect-typeorm/out";
 
 const __dirname = path.resolve()
 const registerHTML = path.join(__dirname, '/src/html/register.html'); 
@@ -17,6 +19,10 @@ const htmlPageRoute = Router();
 
 htmlPageRoute.use(session({
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
+    cookie: {
+        secure: false,
+        maxAge: 60000
+    },
     resave: true, // Coloquei assim para Evitar um Erro << 
     saveUninitialized: true // Coloquei assim para Evitar um Erro << 
 }))

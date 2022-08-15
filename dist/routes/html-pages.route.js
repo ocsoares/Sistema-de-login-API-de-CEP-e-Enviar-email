@@ -19,6 +19,10 @@ var logoutHTML = path_1.default.join(__dirname, 'src/html/logout.html');
 var htmlPageRoute = (0, express_1.Router)();
 htmlPageRoute.use((0, express_session_1.default)({
     secret: process.env.SESSION_SECRET,
+    cookie: {
+        secure: false,
+        maxAge: 60000
+    },
     resave: true,
     saveUninitialized: true
 }));
