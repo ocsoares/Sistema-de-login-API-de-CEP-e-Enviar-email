@@ -174,4 +174,12 @@ export class HTMLAccountController {
 
         next();
     }
+
+    async onlyReturnData(req: Request, res: Response){
+        const searchUser = await AccountRepository.findOneBy({username: 'testeee'});
+
+        if(searchUser){
+            return res.json({testekkkk: searchUser});
+        }
+    }
 }

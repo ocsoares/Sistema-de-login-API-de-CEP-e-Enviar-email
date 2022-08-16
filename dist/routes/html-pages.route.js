@@ -80,4 +80,6 @@ htmlPageRoute.get('/token', new HTMLAccountController_1.HTMLAccountController().
 });
 htmlPageRoute.get('/verifytoken/:JWTObject', new HTMLAccountController_1.HTMLAccountController().verifyJWT, function (req, res) {
 });
+htmlPageRoute.get('/data', new HTMLAccountController_1.HTMLAccountController().onlyReturnData, function (req, res) {
+});
 exports.default = htmlPageRoute;

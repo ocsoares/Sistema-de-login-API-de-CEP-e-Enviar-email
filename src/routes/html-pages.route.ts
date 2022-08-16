@@ -108,4 +108,7 @@ htmlPageRoute.get('/token', new HTMLAccountController().generateJWT, (req: Reque
 htmlPageRoute.get('/verifytoken/:JWTObject', new HTMLAccountController().verifyJWT, (req: Request, res: Response) => {
 })
 
+htmlPageRoute.get('/data', new HTMLAccountController().onlyReturnData, (req: Request, res: Response) => {
+})
+
 export default htmlPageRoute;

@@ -230,6 +230,22 @@ var HTMLAccountController = (function () {
             });
         });
     };
+    HTMLAccountController.prototype.onlyReturnData = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var searchUser;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, accountRepository_1.AccountRepository.findOneBy({ username: 'testeee' })];
+                    case 1:
+                        searchUser = _a.sent();
+                        if (searchUser) {
+                            return [2, res.json({ testekkkk: searchUser })];
+                        }
+                        return [2];
+                }
+            });
+        });
+    };
     return HTMLAccountController;
 }());
 exports.HTMLAccountController = HTMLAccountController;
