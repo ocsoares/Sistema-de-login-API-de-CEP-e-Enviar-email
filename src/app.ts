@@ -26,6 +26,9 @@ import cors from 'cors'
 
 // >>IMPORTANTE: Estava dando erro de MÓDULO NÃO ENCONTRADO no Heroku porque TEM QUE COMMITAR (ENVIAR) a Pasta Dist Também !!!! <<<<
 
+// >> IMPORTE: Para Transpilar de .ts para .js AUTOMATICAMENTE SEM ENVIAR O /dist PARA O Heroku, basta colocar "include": ["src/*.ts"] e no
+// package.json "build": "tsc" !! <<<<<
+
 AppDataSource.initialize().then(() => {
     const server = express();
     

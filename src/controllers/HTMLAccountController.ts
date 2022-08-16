@@ -124,9 +124,9 @@ export class HTMLAccountController {
                 expiresIn: '12h'
             })
 
-            // req.jwt = JWT;
+            req.session.jwt = JWT;
 
-            // res.json({message: `Seu token é: ${req.jwt}`});
+            res.json({message: `Seu token é: ${req.session.jwt}`});
         }
 
         else{
