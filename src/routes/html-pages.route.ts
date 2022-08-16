@@ -40,6 +40,7 @@ htmlPageRoute.use(session({
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
+    console.log('NODE ENV:', process.env.NODE_ENV);
     res.sendFile(homeHTML);
 })
 
