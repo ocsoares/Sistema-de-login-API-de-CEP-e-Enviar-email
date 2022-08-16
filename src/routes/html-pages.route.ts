@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
 import path from "path";
-import session from 'cookie-session'
+import session from 'express-session'
 import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
@@ -26,9 +26,13 @@ const htmlPageRoute = Router();
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
     // name:    <- O name PADRÃO é session !! <<  
+    resave: false,
+    saveUninitialized: true,
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    keys: [process.env.SESSION_SECRET as string],
-    
+    cookie:{
+        secure: (process.env.NODE_ENV && process.env.NODE_ENV == 'production') ? true:false
+    }
+        
     // cookie: {
     //     secure: false,
     //     maxAge: 60000
