@@ -33,7 +33,13 @@ htmlPageRoute.post('/register', new HTMLAccountController_1.HTMLAccountControlle
     res.sendFile(registerSuccessufullHTML);
 });
 htmlPageRoute.get('/login', function (req, res) {
-    res.sendFile(loginHTML);
+    var _a;
+    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.login) {
+        res.redirect('/dashboard');
+    }
+    else {
+        res.sendFile(loginHTML);
+    }
 });
 htmlPageRoute.post('/login', new HTMLAccountController_1.HTMLAccountController().loginAccountHTML, function (req, res) {
 });

@@ -20,7 +20,9 @@ export const AppDataSource = new DataSource({
     entities: [`${__dirname}/**/entity/*.{ts,js}`],
     migrations: [`${__dirname}/**/migration/*.{ts,js}`],
 
-    ssl:{
-        rejectUnauthorized: false
-    }
+        // Isso aqui Permite conectar ao Heroku, mas LOCALMENTE NÃO !!
+        //  OBS: Procurar uma forma de Permitir os Dois, Remoto e Local !! <<
+    // ssl:{
+    //     rejectUnauthorized: false
+    // }
 });

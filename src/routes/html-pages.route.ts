@@ -21,6 +21,8 @@ const htmlPageRoute = Router();
 
 // Procurar sobre views (EJS, engine) DEPOIS !! <<
 
+// VER SE NO HEROKU ESTÁ FUNCIONANDO O NODEMAILER !! <<<<<
+
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
     // name:    <- O name PADRÃO é session !! <<  
@@ -50,9 +52,12 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    
+    if(req.session?.login){
+        res.redirect('/dashboard');
+    }
+    else{
         res.sendFile(loginHTML);
-    
+    }
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {

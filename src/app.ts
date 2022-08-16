@@ -40,7 +40,7 @@ AppDataSource.initialize().then(() => {
     server.use(express.static(__dirname + '/fontawesome-free-6.1.2-web/')) // CSS do Diretório: /fontawesome-free-6.1.2-web/css/all.min.css"
     server.use(express.static(__dirname + '/dist'))
     
-    // server.set('trust proxy', 1);  // Pro Heroku << !! // VER SE ISSO FUNCIONA MEMO <
+    server.set('trust proxy', 1);  // Pro Heroku << !! // VER SE ISSO FUNCIONA MEMO <
 
     server.use(htmlPageRoute);
     server.use(checkStatusRoute);
