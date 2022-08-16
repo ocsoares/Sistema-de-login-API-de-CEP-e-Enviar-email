@@ -24,6 +24,8 @@ import cors from 'cors'
 
 // Depois procurar sobre render e views (Nodejs) !! <<
 
+// >>IMPORTANTE: Estava dando erro de MÓDULO NÃO ENCONTRADO no Heroku porque TEM QUE COMMITAR (ENVIAR) a Pasta Dist Também !!!! <<<<
+
 AppDataSource.initialize().then(() => {
     const server = express();
     
