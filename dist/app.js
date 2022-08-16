@@ -13,6 +13,7 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 database_1.AppDataSource.initialize().then(function () {
     var server = (0, express_1.default)();
+    server.set('trust proxy', 1);
     var host = 'http://localhost';
     var port = 5000;
     var __dirname = path_1.default.resolve();
@@ -22,7 +23,6 @@ database_1.AppDataSource.initialize().then(function () {
     server.use(express_1.default.static(__dirname + '/src/public'));
     server.use(express_1.default.static(__dirname + '/fontawesome-free-6.1.2-web/'));
     server.use(express_1.default.static(__dirname + '/dist'));
-    server.set('trust proxy', 1);
     server.use(html_pages_route_1.default);
     server.use(check_status_route_1.default);
     server.use(error_middleware_1.errorMiddleware);
