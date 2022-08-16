@@ -186,8 +186,6 @@ var HTMLAccountController = (function () {
                     }, (_b = process.env.JWT_HASH) !== null && _b !== void 0 ? _b : '', {
                         expiresIn: '12h'
                     });
-                    req.jwt = JWT;
-                    res.json({ message: "Seu token \u00E9: ".concat(req.jwt) });
                 }
                 else {
                     res.redirect('/login');

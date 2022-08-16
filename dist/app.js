@@ -13,7 +13,6 @@ var path_1 = __importDefault(require("path"));
 var cors_1 = __importDefault(require("cors"));
 database_1.AppDataSource.initialize().then(function () {
     var server = (0, express_1.default)();
-    server.set('trust proxy', 1);
     var host = 'http://localhost';
     var port = 5000;
     var __dirname = path_1.default.resolve();
