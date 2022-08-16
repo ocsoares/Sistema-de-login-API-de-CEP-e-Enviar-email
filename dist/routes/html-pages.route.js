@@ -33,6 +33,7 @@ htmlPageRoute.post('/register', new HTMLAccountController_1.HTMLAccountControlle
     res.sendFile(registerSuccessufullHTML);
 });
 htmlPageRoute.get('/login', function (req, res) {
+    res.sendFile(loginHTML);
 });
 htmlPageRoute.post('/login', new HTMLAccountController_1.HTMLAccountController().loginAccountHTML, function (req, res) {
 });

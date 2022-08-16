@@ -50,6 +50,9 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
+    
+        res.sendFile(loginHTML);
+    
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
