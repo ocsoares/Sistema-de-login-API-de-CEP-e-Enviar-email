@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var express_1 = require("express");
 var path_1 = __importDefault(require("path"));
-var express_session_1 = __importDefault(require("express-session"));
+var cookie_session_1 = __importDefault(require("cookie-session"));
 var body_parser_1 = __importDefault(require("body-parser"));
 var HTMLAccountController_1 = require("../controllers/HTMLAccountController");
 var axios_script_1 = require("../scripts/axios-script");
@@ -18,13 +18,9 @@ var homeHTML = path_1.default.join(__dirname, '/src/html/home.html');
 var logoutHTML = path_1.default.join(__dirname, '/src/html/logout.html');
 var dashboardHTML = path_1.default.join(__dirname, '/src/html/dashboard.html');
 var htmlPageRoute = (0, express_1.Router)();
-htmlPageRoute.use((0, express_session_1.default)({
-    resave: false,
-    saveUninitialized: true,
+htmlPageRoute.use((0, cookie_session_1.default)({
     secret: process.env.SESSION_SECRET,
-    cookie: {
-        secure: (process.env.NODE_ENV && process.env.NODE_ENV == 'production') ? true : false
-    }
+    keys: [process.env.SESSION_SECRET],
 }));
 htmlPageRoute.use(body_parser_1.default.urlencoded({ extended: true }));
 htmlPageRoute.get('/', function (req, res) {
