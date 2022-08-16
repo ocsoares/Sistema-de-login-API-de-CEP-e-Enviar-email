@@ -16,7 +16,7 @@ var registerSuccessufullHTML = path_1.default.join(__dirname, '/src/html/registe
 var loginHTML = path_1.default.join(__dirname, '/src/html/login.html');
 var homeHTML = path_1.default.join(__dirname, '/src/html/home.html');
 var logoutHTML = path_1.default.join(__dirname, 'src/html/logout.html');
-var dashboardHTML = path_1.default.join(__dirname, '/src/html/dashboard.html');
+var dashboardHTML = path_1.default.join(__dirname, 'src/html/dashboard.html');
 var htmlPageRoute = (0, express_1.Router)();
 htmlPageRoute.use((0, cookie_session_1.default)({
     secret: process.env.SESSION_SECRET,

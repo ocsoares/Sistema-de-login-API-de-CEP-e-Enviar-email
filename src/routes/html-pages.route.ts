@@ -12,7 +12,7 @@ const registerSuccessufullHTML = path.join(__dirname, '/src/html/registerSuccess
 const loginHTML = path.join(__dirname, '/src/html/login.html');
 const homeHTML = path.join(__dirname, '/src/html/home.html');
 const logoutHTML = path.join(__dirname, 'src/html/logout.html');
-const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
+const dashboardHTML = path.join(__dirname, 'src/html/dashboard.html');
 
 const htmlPageRoute = Router();
 

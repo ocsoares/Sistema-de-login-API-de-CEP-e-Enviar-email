@@ -175,6 +175,7 @@ export class HTMLAccountController {
         next();
     }
 
+        // APENAS PARA TESTE, APAGAR DEPOIS !!
     async onlyReturnData(req: Request, res: Response){
         const searchUser = await AccountRepository.findOneBy({username: 'testeee'});
 
