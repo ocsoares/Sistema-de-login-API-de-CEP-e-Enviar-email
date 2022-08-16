@@ -9,5 +9,7 @@ exports.AppDataSource = new typeorm_1.DataSource({
     url: process.env.DATABASE_URL,
     entities: ["".concat(__dirname, "/**/entity/*.{ts,js}")],
     migrations: ["".concat(__dirname, "/**/migration/*.{ts,js}")],
-    ssl: {}
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
