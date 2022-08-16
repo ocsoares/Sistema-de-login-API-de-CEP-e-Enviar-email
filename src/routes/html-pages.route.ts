@@ -11,8 +11,8 @@ const registerHTML = path.join(__dirname, '/src/html/register.html');
 const registerSuccessufullHTML = path.join(__dirname, '/src/html/registerSuccessufull.html'); 
 const loginHTML = path.join(__dirname, '/src/html/login.html');
 const homeHTML = path.join(__dirname, '/src/html/home.html');
-const logoutHTML = path.join(__dirname, 'src/html/logout.html');
-const dashboardHTML = path.join(__dirname, 'src/html/dashboard.html');
+const logoutHTML = path.join(__dirname, '/src/html/logout.html');
+const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
 
 const htmlPageRoute = Router();
 
@@ -50,12 +50,6 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    if(req.session?.login){
-        res.redirect('/dashboard');
-    }
-    else{
-        res.sendFile(loginHTML);
-    }
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {

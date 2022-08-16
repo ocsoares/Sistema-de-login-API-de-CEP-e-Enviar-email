@@ -15,8 +15,8 @@ var registerHTML = path_1.default.join(__dirname, '/src/html/register.html');
 var registerSuccessufullHTML = path_1.default.join(__dirname, '/src/html/registerSuccessufull.html');
 var loginHTML = path_1.default.join(__dirname, '/src/html/login.html');
 var homeHTML = path_1.default.join(__dirname, '/src/html/home.html');
-var logoutHTML = path_1.default.join(__dirname, 'src/html/logout.html');
-var dashboardHTML = path_1.default.join(__dirname, 'src/html/dashboard.html');
+var logoutHTML = path_1.default.join(__dirname, '/src/html/logout.html');
+var dashboardHTML = path_1.default.join(__dirname, '/src/html/dashboard.html');
 var htmlPageRoute = (0, express_1.Router)();
 htmlPageRoute.use((0, cookie_session_1.default)({
     secret: process.env.SESSION_SECRET,
@@ -33,13 +33,6 @@ htmlPageRoute.post('/register', new HTMLAccountController_1.HTMLAccountControlle
     res.sendFile(registerSuccessufullHTML);
 });
 htmlPageRoute.get('/login', function (req, res) {
-    var _a;
-    if ((_a = req.session) === null || _a === void 0 ? void 0 : _a.login) {
-        res.redirect('/dashboard');
-    }
-    else {
-        res.sendFile(loginHTML);
-    }
 });
 htmlPageRoute.post('/login', new HTMLAccountController_1.HTMLAccountController().loginAccountHTML, function (req, res) {
 });
