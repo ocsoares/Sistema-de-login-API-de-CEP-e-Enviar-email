@@ -18,7 +18,7 @@ const htmlPageRoute = Router();
 
 const server = express()
 
-server.enable('trust proxy', true);
+server.set('trust proxy', '127.0.0.1');
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
@@ -52,7 +52,6 @@ htmlPageRoute.use(session({
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
-    req.ip
     res.sendFile(homeHTML);
 })
 
