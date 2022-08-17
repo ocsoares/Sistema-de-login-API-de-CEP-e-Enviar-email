@@ -18,7 +18,7 @@ const htmlPageRoute = Router();
 
 const server = express()
 
-server.set('trust proxy', 1)
+server.enable('trust proxy', true);
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
@@ -31,9 +31,9 @@ server.set('trust proxy', 1)
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
-    name: 'testeteste',    // <- O name PADRÃO é session !! <<  
+    name: 'session',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    keys: [process.env.SESSION_SECRET as string], // tentar tirar isso
+    keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     sameSite: 'lax',
@@ -52,6 +52,7 @@ htmlPageRoute.use(session({
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
+    req.ip
     res.sendFile(homeHTML);
 })
 
