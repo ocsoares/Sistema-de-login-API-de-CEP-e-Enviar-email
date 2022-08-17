@@ -114,24 +114,26 @@ export class HTMLAccountController {
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){
-        if(req.session?.login){ // SE N DER TIRAR ISSO <
+        // if(req.session?.login){ // SE N DER TIRAR ISSO <
             
             const JWT = jwt.sign({
-                id: req.session.login.id,
-                username: req.session.login.username,
-                email: req.session.login.email
+                id: req.session?.login.id,
+                username: req.session?.login.username,
+                email: req.session?.login.email
             }, process.env.JWT_HASH ?? '', {
                 expiresIn: '12h'
             })
 
-            req.session.jwt = JWT;
+            if(req.session){
+                req.session.jwt = JWT;
+            }
 
             // res.json({message: `Seu token é: ${req.session.jwt}`});
-        }
+        // }
 
-        else{
-            res.redirect('/login');
-        }
+        // else{
+        //     res.redirect('/login');
+        // }
 
         next();
     }
