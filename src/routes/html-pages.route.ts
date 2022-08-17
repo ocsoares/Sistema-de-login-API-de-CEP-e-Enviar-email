@@ -16,10 +16,6 @@ const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
 
 const htmlPageRoute = Router();
 
-const server = express()
-
-server.enable('trust proxy')    
-
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
 
@@ -36,7 +32,7 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    // sameSite: 'lax',
+    sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
@@ -119,7 +115,6 @@ htmlPageRoute.get('/cep', runAxios(), (req: Request, res: Response) => {
 
     // Tive que usar um Middleware porque com req.jwt na ROTA estava dando Undefined !!! <<<
 htmlPageRoute.get('/token', new HTMLAccountController().generateJWT, (req: Request, res: Response) => {
-    console.log('SEU TOKEN:', req.session?.jwt);
 })
 
 htmlPageRoute.get('/verifytoken/:JWTObject', new HTMLAccountController().verifyJWT, (req: Request, res: Response) => {
