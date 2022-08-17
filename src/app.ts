@@ -56,6 +56,12 @@ AppDataSource.initialize().then(() => {
     server.use(errorMiddleware);
 
     return server.listen(process.env.PORT || port, () => {
-        console.log(`Servidor online na rota: ${host}:${port} !`);
+        if(process.env.NODE_ENV === 'production'){
+            console.log('Servidor rodando remotamente no Heroku !');
+        }
+
+        else{
+            console.log(`Servidor online na rota: ${host}:${port} !`)
+        }
     })
 })
