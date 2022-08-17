@@ -29,15 +29,14 @@ const htmlPageRoute = Router();
 htmlPageRoute.use(session({
     name: 'session',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    keys: [process.env.SESSION_SECRET as string],
+    keys: [process.env.SESSION_SECRET as string, 'dsdad', 'kkk', 'fodase....', 'aiojiofjfiod'],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     // sameSite: 'none',
+    path: '/',
     secure: process.env.NODE_ENV === 'production' ? true: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-    domain: '.herokuapp.com'
-    
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days    
     // cookie: {
     //     secure: false,
     //     maxAge: 60000
