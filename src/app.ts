@@ -61,7 +61,7 @@ AppDataSource.initialize().then(() => {
         }
 
         else{
-            console.log(`Servidor online na rota: ${host}:${port} !`)
+            console.log(`Servidor online na rota: ${host}:${port} !`);
         }
     })
 })
