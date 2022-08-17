@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { AppDataSource } from './database';
 import { errorMiddleware } from './middlewares/error.middleware';
 import checkStatusRoute from './routes/check-status.route';
@@ -33,6 +33,8 @@ import cors from 'cors'
 // dist/*
 //!dist/build
 
+// PESQUISAR sobre os Addons do Heroku: pappertrail e rollbar
+
 AppDataSource.initialize().then(() => {
     const server = express();
     
@@ -40,20 +42,9 @@ AppDataSource.initialize().then(() => {
     const port = 5000;
 
     const __dirname = path.resolve();
-    server.set('trust proxy', 1) // trust first proxy
-    server.use(cors({credentials: true, methods: 'GET, POST, PUT, DELETE'}));
-
-    server.use(function(req: Request, res: Response, next) {
-        res.header("Access-Control-Allow-Credentials", true as any);
-        res.header("Access-Control-Allow-Origin", "https://my.godaddy.subdomain");
-        res.header("Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-HTTP-Method-Override, Set-Cookie, Cookie");
-        res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-        next();  
-     });  
-
+    server.use(cors());
     server.use(express.json());
-    server.use(express.urlencoded({extended: false}));
+    server.use(express.urlencoded({extended: true}));
     server.use(express.static(__dirname + '/src/public')) // CSS do Diretório: /src/public/css/styles.css
     server.use(express.static(__dirname + '/fontawesome-free-6.1.2-web/')) // CSS do Diretório: /fontawesome-free-6.1.2-web/css/all.min.css"
     server.use(express.static(__dirname + '/dist'))

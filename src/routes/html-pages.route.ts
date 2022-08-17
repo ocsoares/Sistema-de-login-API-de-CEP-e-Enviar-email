@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import express, { Request, Response, Router } from "express";
 import path from "path";
 import session from 'cookie-session'
 import bodyParser from "body-parser";
@@ -16,12 +16,20 @@ const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
 
 const htmlPageRoute = Router();
 
+const server = express()
+
+if (server.get('env') === 'production') {
+    server.set('trust proxy', 1); // trust first proxy, crucial
+}
+
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
 
 // Procurar sobre views (EJS, engine) DEPOIS !! <<
 
 // VER SE NO HEROKU ESTÁ FUNCIONANDO O NODEMAILER !! <<<<<
+
+// Se eu não conseguir usar os Cookies, usar JWT no lugar deles e Procurar se é uma boa prática !! <<
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
@@ -30,8 +38,10 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
+    sameSite: 'lax' || 'strict',
+    secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
-    maxAge: 8600000,
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     
     // cookie: {
     //     secure: false,
