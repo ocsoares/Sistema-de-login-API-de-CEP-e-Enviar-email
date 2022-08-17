@@ -40,8 +40,8 @@ AppDataSource.initialize().then(() => {
     const port = 5000;
 
     const __dirname = path.resolve();
-    server.enable('trust proxy');
-    server.use(cors());
+    server.set('trust proxy', 1) // trust first proxy
+    // server.use(cors());
     server.use(express.json());
     server.use(express.urlencoded({extended: true}));
     server.use(express.static(__dirname + '/src/public')) // CSS do Diretório: /src/public/css/styles.css

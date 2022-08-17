@@ -30,8 +30,9 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    httpOnly: false,
-    maxAge: 1000 * 60 * 60 * 48,
+    secure: process.env.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 7 * 24 * 60 * 60 * 1000
     
     // cookie: {
     //     secure: false,
