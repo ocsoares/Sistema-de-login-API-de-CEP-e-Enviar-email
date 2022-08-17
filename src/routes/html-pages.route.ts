@@ -18,7 +18,7 @@ const htmlPageRoute = Router();
 
 const server = express()
 
-server.set('trust proxy', '127.0.0.1');
+server.enable('trust proxy')    
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
@@ -36,9 +36,9 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    sameSite: 'lax',
+    // sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production' ? true: false,
-    httpOnly: false,
+    // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     
     // cookie: {
@@ -73,6 +73,8 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
+    console.log('LOGADO !!!!');
+    console.log('REQ LOGIN:', req.session?.login);
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
