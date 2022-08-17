@@ -33,7 +33,7 @@ server.set('trust proxy', 1)
 htmlPageRoute.use(session({
     name: 'testeteste',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    // keys: [process.env.SESSION_SECRET as string], // tentar tirar isso
+    keys: [process.env.SESSION_SECRET as string], // tentar tirar isso
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     sameSite: 'lax',
