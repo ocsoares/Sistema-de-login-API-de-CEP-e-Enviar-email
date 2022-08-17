@@ -120,7 +120,7 @@ export class HTMLAccountController {
                 id: req.session?.login.id,
                 username: req.session?.login.username,
                 email: req.session?.login.email
-            }, process.env.JWT_HASH ?? '', {
+            }, "" + process.env.JWT_HASH, {
                 expiresIn: '12h'
             })
 
