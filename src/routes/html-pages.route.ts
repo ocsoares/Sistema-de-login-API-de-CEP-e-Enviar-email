@@ -60,7 +60,7 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    if(req.session?.login){
+    if(req.session?.jwt){
         res.redirect('/dashboard');
     }
     else{
