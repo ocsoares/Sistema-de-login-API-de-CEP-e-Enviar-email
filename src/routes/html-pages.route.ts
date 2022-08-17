@@ -34,7 +34,7 @@ htmlPageRoute.use(session({
     // sameSite: 'none', // esse tb <
     // sameSite: 'none',
     secure: process.env.NODE_ENV === 'production' ? true: false,
-    // httpOnly: false,
+    httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     domain: '.herokuapp.com'
     
