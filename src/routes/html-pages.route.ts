@@ -18,9 +18,7 @@ const htmlPageRoute = Router();
 
 const server = express()
 
-if (server.get('env') === 'production') {
-    server.set('trust proxy', 1); // trust first proxy, crucial
-}
+server.set('trust proxy', 1)
 
 // IMPORTANTE: Para Autenticação, usar POST ao invés de GET por + Segurança, um desses Motivos são que com GET os Dados do Input ficam ex-
 // -postos na URL !! <<
@@ -39,7 +37,7 @@ htmlPageRoute.use(session({
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production' ? true: false,
     httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     
