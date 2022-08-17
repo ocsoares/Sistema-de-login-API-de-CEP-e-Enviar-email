@@ -25,13 +25,13 @@ const htmlPageRoute = Router();
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
-    // name:    <- O name PADRÃO é session !! <<  
+    name: 'session',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
     keys: [process.env.SESSION_SECRET as string],
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-    maxAge: 1000 * 60 * 60 * 48
+    secure: true, // esse secure ta fazendo n pegar local <
+    httpOnly: false,
+    sameSite: 'none',
+    // maxAge: 1000 * 60 * 60 * 48,
     
     // cookie: {
     //     secure: false,
