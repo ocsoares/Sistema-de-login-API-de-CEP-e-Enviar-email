@@ -22,5 +22,6 @@ export const AppDataSource = new DataSource({
 
 
         // Isso aqui permite Acessar LOCALMENTE e REMOTAMENTE, de acordo com o .env NODE_ENV !!
+        // O NODE_ENV Apenas existe no HEROKU (Remoto) e Retorna production, no localhost NÃO EXISTE !! <<
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });

@@ -29,6 +29,10 @@ import cors from 'cors'
 // >> IMPORTE: Para Transpilar de .ts para .js AUTOMATICAMENTE SEM ENVIAR O /dist PARA O Heroku, basta colocar "include": ["src/*.ts"] e no
 // package.json "build": "tsc" !! <<<<<
 
+    // Ignora o dist INTEIRO (dist/*)  MENOS a Pasta build (!dist/build) !! <<
+// dist/*
+//!dist/build
+
 AppDataSource.initialize().then(() => {
     const server = express();
     
