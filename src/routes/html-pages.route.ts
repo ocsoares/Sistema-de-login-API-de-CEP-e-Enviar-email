@@ -32,10 +32,11 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    sameSite: 'strict',
+    // sameSite: 'none',
     secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    domain: '.herokuapp.com'
     
     // cookie: {
     //     secure: false,
