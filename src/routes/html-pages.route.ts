@@ -28,11 +28,10 @@ htmlPageRoute.use(session({
     name: 'session',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
     keys: [process.env.SESSION_SECRET as string],
-    // secure: true, // esse secure ta fazendo n pegar local <
-    // sameSite: 'none', // esse tb <
-    secure: process.env.NODE_ENV === "production",
+    secure: true, // esse secure ta fazendo n pegar local <
+    sameSite: 'none', // esse tb <
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    maxAge: 8600000,
     
     // cookie: {
     //     secure: false,
