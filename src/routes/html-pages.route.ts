@@ -31,9 +31,9 @@ server.set('trust proxy', 1)
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
-    name: 'session',    // <- O name PADRÃO é session !! <<  
+    name: 'testeteste',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
-    keys: [process.env.SESSION_SECRET as string],
+    // keys: [process.env.SESSION_SECRET as string], // tentar tirar isso
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     sameSite: 'lax',
