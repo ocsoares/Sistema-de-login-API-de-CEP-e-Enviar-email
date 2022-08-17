@@ -119,6 +119,7 @@ htmlPageRoute.get('/cep', runAxios(), (req: Request, res: Response) => {
 
     // Tive que usar um Middleware porque com req.jwt na ROTA estava dando Undefined !!! <<<
 htmlPageRoute.get('/token', new HTMLAccountController().generateJWT, (req: Request, res: Response) => {
+    console.log('SEU TOKEN:', req.session?.jwt);
 })
 
 htmlPageRoute.get('/verifytoken/:JWTObject', new HTMLAccountController().verifyJWT, (req: Request, res: Response) => {
