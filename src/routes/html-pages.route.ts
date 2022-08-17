@@ -27,20 +27,16 @@ const htmlPageRoute = Router();
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
-    name: 'session_teste',    // <- O name PADRÃO é session !! <<  
-    secret: process.env.SESSION_SECRET as string || 'sdjiofjois', // Chave para Autenticar a session !! <<
-    keys: [process.env.SESSION_SECRET as string, 'dsdad', 'kkk', 'fodase....', 'aiojiofjfiod'],
+    name: 'session',    // <- O name PADRÃO é session !! <<  
+    secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
+    keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    // sameSite: 'none',
-    // path: '/',
-    // secure: process.env.NODE_ENV === 'production' ? true: false,
-
-    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax', // must be 'none' to enable cross-site delivery
-    secure: process.env.NODE_ENV === "production", // must be true if sameSite='none'
-
-    // httpOnly: true,
-    // maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days    
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production' ? true: false,
+    // httpOnly: false,
+    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    
     // cookie: {
     //     secure: false,
     //     maxAge: 60000
@@ -72,9 +68,10 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
     }
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
-htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
+htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, new HTMLAccountController().generateJWT, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
     console.log('REQ LOGIN:', req.session?.login);
+    console.log('JWT:', req.session?.jwt);
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
