@@ -60,6 +60,7 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
+    console.log('JWT NO GET LOGIN:', req.session?.jwt);
     if(req.session?.jwt){
         res.redirect('/dashboard');
     }
