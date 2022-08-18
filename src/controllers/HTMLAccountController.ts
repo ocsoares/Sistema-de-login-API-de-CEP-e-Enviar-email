@@ -106,7 +106,7 @@ export class HTMLAccountController {
         const JWTToCookie = jwt.sign({
             id: searchUserByEmail.id,
             email: searchUserByEmail.email
-        }, process.env.JWT_HASH ?? '', {
+        }, "" + process.env.JWT_HASH , { // Arrumou um ERRO que estava dando no Heroku !! <<
             expiresIn: '12h'
         })
 
