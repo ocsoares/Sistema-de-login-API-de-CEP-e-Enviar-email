@@ -38,7 +38,7 @@ htmlPageRoute.use(session({
     // domain: 'https://sistema-login-api-cep-e-email.herokuapp.com',
     // secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
-    maxAge: 1000 * 60 * 60 * 24, // 30 days
+    maxAge: 1000 * 60 * 60, // 30 days
     
     // cookie: {
     //     secure: false,
@@ -74,15 +74,17 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
     console.log('REQ LOGIN:', req.session?.login);
-    res.cookie('teste', 'cookie', {
-        sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: true
-    })
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
     if(req.session?.login){     
+        res.cookie('teste', 'cookie', {
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        httpOnly: false
+    })
+    console.log('req.cookies:', req.cookies);
+    console.log('res.cookie:', res.cookie);
         res.sendFile(dashboardHTML);
     }
     else{

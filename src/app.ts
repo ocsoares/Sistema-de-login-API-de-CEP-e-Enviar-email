@@ -43,7 +43,7 @@ AppDataSource.initialize().then(() => {
 
     const __dirname = path.resolve();
 
-    server.set('trust proxy', 1);   
+    server.set("trust proxy", 1);   
     
     server.use(cors({
         credentials: true,
