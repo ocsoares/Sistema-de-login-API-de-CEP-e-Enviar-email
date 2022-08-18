@@ -32,8 +32,10 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: process.env.NODE_ENV === "production" ? true : false,
+    httpOnly: process.env.NODE_ENV === 'production' ? true : false,
+    domain: 'https://sistema-login-api-cep-e-email.herokuapp.com',
     // secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24, // 30 days

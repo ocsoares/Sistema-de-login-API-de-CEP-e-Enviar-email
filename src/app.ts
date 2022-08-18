@@ -47,17 +47,16 @@ AppDataSource.initialize().then(() => {
     
     server.use(cors({
         credentials: true,
-        origin: ['https://viacep.com.br']
+        origin: ['https://viacep.com.br', "https://sistema-login-api-cep-e-email.herokuapp.com"],
+        exposedHeaders: ['Authorization']
     }));
 
     server.use(express.json());
-    server.use(express.urlencoded({extended: true}));
+    // server.use(express.urlencoded({extended: true}));
     server.use(express.static(__dirname + '/src/public')) // CSS do Diretório: /src/public/css/styles.css
     server.use(express.static(__dirname + '/fontawesome-free-6.1.2-web/')) // CSS do Diretório: /fontawesome-free-6.1.2-web/css/all.min.css"
     server.use(express.static(__dirname + '/dist'))
     
-    // server.set('trust proxy', 1);  // Pro Heroku << !! // VER SE ISSO FUNCIONA MEMO <
-
     server.use(htmlPageRoute);
     server.use(checkStatusRoute);
     // server.use(crudRoute); POR ENQUANTO vou deixar isso Comentado, porque irei mexer APENAS com a Rota de HTML !! <<
