@@ -81,8 +81,8 @@ htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
-    console.log('REQ SESSION APENAS:', req.session);
-    if(req.session){     
+    console.log('REQ SESSION.COOKIE:', req.session?.cookie);
+    if(req.session?.cookie){     
         res.sendFile(dashboardHTML);
     }
     else{
