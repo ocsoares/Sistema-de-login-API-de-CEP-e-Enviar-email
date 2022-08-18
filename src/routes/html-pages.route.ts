@@ -25,24 +25,16 @@ const htmlPageRoute = Router();
 
 // Se eu não conseguir usar os Cookies, usar JWT no lugar deles e Procurar se é uma boa prática !! <<
 
+// Pesquisar sobre Criptografia em JWT !! <<
+
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
     name: 'session',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
     keys: [process.env.SESSION_SECRET as string],
-    // secure: true, // esse secure ta fazendo n pegar local <
-    // sameSite: 'none', // esse tb <
     sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production' ? true: false,
-    // httpOnly: false,
-    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
-    
-    // cookie: {
-    //     secure: false,
-    //     maxAge: 60000
-    // },
-    // resave: true, // Coloquei assim para Evitar um Erro << 
-    // saveUninitialized: true // Coloquei assim para Evitar um Erro << 
+    httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
 }))
 
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
@@ -60,7 +52,7 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    if(req.session?.login){
+    if(req.headers.cookie){
         res.redirect('/dashboard');
     }
     else{
@@ -70,12 +62,12 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
-    console.log('REQ LOGIN:', req.session?.login);
+    console.log('REQ LOGIN:', req.headers.cookie);
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
-    if(req.session?.login || req.headers.cookie){
-        console.log('req session login', req.session?.login)
+    if(req.headers.cookie || req.headers.cookie){
+        console.log('req session login', req.headers.cookie)
         console.log('req header cookies', req.headers.cookie);
         res.sendFile(dashboardHTML);
     }
@@ -86,8 +78,9 @@ htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
 
     // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
 htmlPageRoute.get('/logout', (req: Request, res: Response) => {
-    if(req.session?.login){
-        res.clearCookie('session'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
+    if(req.headers.cookie){
+        console.log('COOKIE NO LOGOUT:', req.headers.cookie);
+        res.clearCookie('session_app'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
         res.sendFile(logoutHTML);
         
         setInterval(() => { // Coloquei isso aqui porque o res.sendFile é ASSÍNCRONO, e o res.end é SÍNCRONO, então Sempre Executava res.end ANTES do res.sendFile e bugava !! <<<
@@ -103,8 +96,8 @@ htmlPageRoute.get('/logout', (req: Request, res: Response) => {
 })
 
 htmlPageRoute.get('/email', (req: Request, res: Response) => {
-    if(req.session?.login){
-        res.json({name: req.session.login.username, email: req.session.login.email});
+    if(req.headers.cookie){
+        res.json({name: req.session?.login.username, email: req.session?.login.email}); // VAI DA ERRO << !!
     }
     else{
         res.redirect('/login');

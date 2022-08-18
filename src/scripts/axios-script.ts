@@ -2,7 +2,7 @@ import axios from "axios";
 import { NextFunction, Request, Response } from "express";
 
 export const runAxios = () => (req: Request, res: Response, next: NextFunction) => {
-    if(req.session?.login){
+    if(req.headers.cookie){
         
         const getCEPValue = req.session?.login.cep.replace('-', ''); // Acho que NÃO precisava, Porque MESMO com - FUNCIONA !! (só por precaução...)
     

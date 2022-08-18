@@ -44,8 +44,8 @@ export class HTMLAccountController {
         const searchUsername = await AccountRepository.findOneBy({username});
         if(searchUsername) throw new BadRequestError('Usuário existente !');
 
-        const searchEmail = await AccountRepository.findOneBy({email});
-        if(searchEmail) throw new BadRequestError('Email existente !');
+        const searchUserByEmail = await AccountRepository.findOneBy({email});
+        if(searchUserByEmail) throw new BadRequestError('Email existente !');
 
         const searchCEP = await AccountRepository.findOneBy({cep});
         if(searchCEP) throw new BadRequestError('CEP existente !');
@@ -89,31 +89,42 @@ export class HTMLAccountController {
             return res.sendFile(loginErrorHTML);
         }
 
-        const searchEmail = await AccountRepository.findOneBy({email}) // Procura por TODAS as Informações no Banco de Dados para o EMAIL ESPECIFICADO !! <<
+        const searchUserByEmail = await AccountRepository.findOneBy({email}) // Procura por TODAS as Informações no Banco de Dados para o EMAIL ESPECIFICADO !! <<
 
-        if(!searchEmail){
+        if(!searchUserByEmail){
             return res.sendFile(loginErrorHTML);
         }
 
-        const searchPassword = await bcrypt.compare(password, searchEmail.password as any);
+        const searchPassword = await bcrypt.compare(password, searchUserByEmail.password as any);
 
         if(!searchPassword){
             return res.sendFile(loginErrorHTML);
         }
         
-        const { password:_, ...finalLogin } = searchEmail;
+        const { password:_, ...finalLogin } = searchUserByEmail;
 
-        if(req.session){
-            // req.session.login = finalLogin
+        const JWTToCookie = jwt.sign({
+            id: searchUserByEmail.id,
+            email: searchUserByEmail.email
+        }, process.env.JWT_HASH ?? '', {
+            expiresIn: '12h'
+        })
 
-            res.cookie('fodase', '12345');
+            // req.session.login = finalLogin // DESATIVADO Funciona normal, ativado acho que não !
+
+            res.cookie('session_app', JWTToCookie, { // Guardar um JWT APENAS com ID e
+                httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
+
+            });
+
             console.log('req headers:', req.headers.cookie)
-        }
+            console.log('JWTToCookie:', JWTToCookie);
+            console.log('APENAS req.cookies', req.cookies) // NAO funciona <<<
 
         res.redirect('/dashboard');
 
         next();
-    }
+    }   // ARRRUMAR OS DE BAIXO COM REQ SESSION LOGIN !! <<
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){
