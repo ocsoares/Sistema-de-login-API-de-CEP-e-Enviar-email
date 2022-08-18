@@ -33,7 +33,7 @@ htmlPageRoute.use(session({
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
     secure: process.env.NODE_ENV === "production" ? true : false,
-    sameSite: process.env.NODE_ENV === "production" ? true : false,
+    sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
     httpOnly: process.env.NODE_ENV === 'production' ? true : false,
     // domain: 'https://sistema-login-api-cep-e-email.herokuapp.com',
     // secure: process.env.NODE_ENV === 'production' ? true: false,
@@ -48,7 +48,7 @@ htmlPageRoute.use(session({
     // saveUninitialized: true // Coloquei assim para Evitar um Erro << 
 }))
 
-// htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
+htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
@@ -74,6 +74,11 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
     console.log('REQ LOGIN:', req.session?.login);
+    res.cookie('teste', 'cookie', {
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
+        secure: process.env.NODE_ENV === "production" ? true : false,
+        httpOnly: true
+    })
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
