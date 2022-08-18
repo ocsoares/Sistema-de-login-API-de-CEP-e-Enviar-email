@@ -36,7 +36,7 @@ htmlPageRoute.use(session({
     secure: process.env.NODE_ENV === "production",
     // secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
-    maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    maxAge: 1000 * 60 * 60 * 24, // 30 days
     
     // cookie: {
     //     secure: false,
