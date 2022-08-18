@@ -45,11 +45,11 @@ AppDataSource.initialize().then(() => {
 
     server.set("trust proxy", 1);   
     
-    server.use(cors({
-        credentials: true,
-        origin: ['https://viacep.com.br', "https://sistema-login-api-cep-e-email.herokuapp.com"],
-        exposedHeaders: ['Authorization']
-    }));
+    server.use(cors())
+    //     credentials: true,
+    //     origin: ['https://viacep.com.br', "https://sistema-login-api-cep-e-email.herokuapp.com"],
+    //     exposedHeaders: ['Authorization']
+    // }));
 
     server.use(express.json());
     // server.use(express.urlencoded({extended: true}));
