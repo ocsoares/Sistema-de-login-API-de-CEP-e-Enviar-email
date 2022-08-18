@@ -103,14 +103,12 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchEmail;
 
-        console.log('REQ SESSION:', req.session);
-        if (req.session) {
-            req.session.cookie = res.cookie('teste', 'cookie', {
+            res.cookie('teste', 'cookie', {
                 sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
                 secure: process.env.NODE_ENV === "production" ? true : false,
                 httpOnly: false
             })
-        }
+        
 
         res.redirect('/dashboard');
 
