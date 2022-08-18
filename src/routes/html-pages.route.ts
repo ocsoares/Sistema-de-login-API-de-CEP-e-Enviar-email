@@ -92,8 +92,8 @@ htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
 
     // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
 htmlPageRoute.get('/logout', (req: Request, res: Response) => {
-    if(req.session?.login){
-        res.clearCookie('session'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
+    if(req.session){
+        res.clearCookie('teste'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
         res.sendFile(logoutHTML);
         
         setInterval(() => { // Coloquei isso aqui porque o res.sendFile é ASSÍNCRONO, e o res.end é SÍNCRONO, então Sempre Executava res.end ANTES do res.sendFile e bugava !! <<<
