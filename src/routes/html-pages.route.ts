@@ -32,7 +32,7 @@ htmlPageRoute.use(session({
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    sameSite: 'strict',
+    // sameSite: 'strict',
     secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
@@ -60,8 +60,7 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
 })
 
 htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    console.log('JWT NO GET LOGIN:', req.session?.jwt);
-    if(req.session?.jwt){
+    if(req.session?.login){
         res.redirect('/dashboard');
     }
     else{
@@ -69,14 +68,13 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
     }
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
-htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, new HTMLAccountController().generateJWT, (req: Request, res: Response) => {
+htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
     console.log('REQ LOGIN:', req.session?.login);
-    console.log('JWT:', req.session?.jwt);
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
-    if(req.session?.login){
+    if(req.session?.login){     
         res.sendFile(dashboardHTML);
     }
     else{
