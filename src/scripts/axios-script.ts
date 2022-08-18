@@ -8,7 +8,7 @@ export const runAxios = () => (req: Request, res: Response, next: NextFunction) 
     
         const url = `https://viacep.com.br/ws/${getCEPValue}/json`;
     
-        axios.get(url)
+        axios.get(url, {withCredentials: true})
             .then(resAxios => { // o resAxios estava com o MESMO nome do res (Response - Express), POR ISSO NÃO estava permitindo usar as propriedades do Response Express !! <<
                 const { ...getAllData } = resAxios.data // Pegando TUDO do res.data nessa ...Variável <<<   
                 

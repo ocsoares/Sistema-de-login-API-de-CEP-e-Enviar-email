@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 import path from "path";
 import session from 'cookie-session'
 import bodyParser from "body-parser";
@@ -27,13 +27,14 @@ const htmlPageRoute = Router();
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
-    name: 'session',    // <- O name PADRÃO é session !! <<  
+    name: 'anyrs',    // <- O name PADRÃO é session !! <<  
     secret: process.env.SESSION_SECRET as string, // Chave para Autenticar a session !! <<
     keys: [process.env.SESSION_SECRET as string],
     // secure: true, // esse secure ta fazendo n pegar local <
     // sameSite: 'none', // esse tb <
-    // sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production' ? true: false,
+    sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === "production",
+    // secure: process.env.NODE_ENV === 'production' ? true: false,
     // httpOnly: false,
     maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     

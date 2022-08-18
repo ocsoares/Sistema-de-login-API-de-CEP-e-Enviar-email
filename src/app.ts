@@ -43,9 +43,13 @@ AppDataSource.initialize().then(() => {
 
     const __dirname = path.resolve();
 
-    server.set('trust proxy', 'loopback');   
+    server.set('trust proxy', 1);   
     
-    server.use(cors());
+    server.use(cors({
+        credentials: true,
+        origin: ['https://viacep.com.br']
+    }));
+
     server.use(express.json());
     server.use(express.urlencoded({extended: true}));
     server.use(express.static(__dirname + '/src/public')) // CSS do Diretório: /src/public/css/styles.css
