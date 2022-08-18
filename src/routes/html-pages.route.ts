@@ -51,13 +51,10 @@ htmlPageRoute.use(session({
 htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
-    res.cookie('teste', 'cookie', {
-        sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
-        secure: process.env.NODE_ENV === "production" ? true : false,
-        httpOnly: false
-    })
-    console.log('req.cookies:', req.cookies);
-    console.log('res.cookie:', res.cookie);
+    // document.cookie = 'teste', 'lixo', '', 'path=/'
+    // let testCookie = document.cookie
+    // console.log('TESTE a:', testCookie);
+    console.log('REQ SESSION COOKIE:', req.session?.cookie)
     res.sendFile(homeHTML);
 })
 
