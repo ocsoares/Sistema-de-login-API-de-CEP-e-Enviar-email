@@ -48,7 +48,7 @@ htmlPageRoute.use(session({
     // saveUninitialized: true // Coloquei assim para Evitar um Erro << 
 }))
 
-htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
+// htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
