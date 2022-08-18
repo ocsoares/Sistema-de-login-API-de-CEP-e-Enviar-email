@@ -37,7 +37,7 @@ htmlPageRoute.use(session({
     httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
 }))
 
-htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
+htmlPageRoute.use(bodyParser.urlencoded({extended: false})) // Permite pegar o req.body do Input do Usuário !! <
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
