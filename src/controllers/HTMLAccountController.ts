@@ -110,8 +110,11 @@ export class HTMLAccountController {
             expiresIn: '12h'
         })
 
-            // req.session.login = finalLogin // DESATIVADO Funciona normal, ativado acho que não !
+            if(req.session){
+                req.session.login = finalLogin // DESATIVADO Funciona normal, ativado acho que não !
+            }
 
+                // Tive que fazer desse jeito porque o Heroku bloqueia os Token !! <<
             res.cookie('session_app', JWTToCookie, { // Guardar um JWT APENAS com ID e
                 httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
 

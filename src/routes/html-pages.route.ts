@@ -62,12 +62,12 @@ htmlPageRoute.get('/login', (req: Request, res: Response) => {
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
     console.log('LOGADO !!!!');
-    console.log('REQ LOGIN:', req.headers.cookie);
+    console.log('REQ LOGIN:', req.session?.login);
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
     if(req.headers.cookie || req.headers.cookie){
-        console.log('req session login', req.headers.cookie)
+        console.log('req session login', req.session?.login)
         console.log('req header cookies', req.headers.cookie);
         res.sendFile(dashboardHTML);
     }
