@@ -103,7 +103,7 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchEmail;
 
-            res.cookie('teste', 'cookie', {
+            req.session = res.cookie('teste', 'cookie', {
                 sameSite: process.env.NODE_ENV === "production" ? 'none' : false,
                 secure: process.env.NODE_ENV === "production" ? true : false,
                 httpOnly: false
