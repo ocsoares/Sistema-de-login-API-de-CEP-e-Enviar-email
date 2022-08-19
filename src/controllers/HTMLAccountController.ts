@@ -105,34 +105,56 @@ export class HTMLAccountController {
 
         const JWTToCookie = jwt.sign({
             id: searchUserByEmail.id,
-            email: searchUserByEmail.email
+            email: searchUserByEmail.email,
+            username: searchUserByEmail.username
         }, "" + process.env.JWT_HASH , { // Arrumou um ERRO que estava dando no Heroku !! <<
             expiresIn: '12h'
         })
-
-            if(req.session){
-                req.session.login = finalLogin // DESATIVADO Funciona normal, ativado acho que não !
-            }
-
+        
                 // Tive que fazer desse jeito porque o Heroku bloqueia os Token !! <<
-            res.cookie('session_app', JWTToCookie, { // Guardar um JWT APENAS com ID e
+            res.cookie('session_app', JWTToCookie, {
                 httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
 
             });
 
-            req.headers.any = finalLogin as any
-            req.body.teste = finalLogin
-
-            console.log('req headers:', req.headers.cookie)
-            console.log('JWTToCookie:', JWTToCookie);
-            console.log('REQ BODY:', req.body);
-            console.log('REQ BODY DE TESTE:', req.body.teste);
-            console.log('APENAS req.cookies', req.cookies) // NAO funciona <<<
-
-        res.redirect('/dashboard');
+            res.redirect('/dashboard');
 
         next();
     }   // ARRRUMAR OS DE BAIXO COM REQ SESSION LOGIN !! <<
+
+    async checkJWTCookie(req: Request, res: Response, next: NextFunction){
+        const JWT = req.headers.cookie?.split(';')[0].split('=')[1]
+        const tokenNameBrowser = req.headers.cookie?.split('=')[0];
+
+        const JWTPoints = JWT?.split('.') // NÃO tem 3 Pontos, tem APENAS 2, Mas se split pelo Ponto ( . ), ele então é Dividido em 3 Partes !!
+                                          //  OBS: Após isso, óbvio, fica com Lenght 3 !! <<<
+
+
+        console.log('COOKIE LOGIN POST:', req.headers.cookie);
+        console.log('NOME DO TOKEN:', tokenNameBrowser);
+        console.log(JWT);
+        console.log(JWTPoints?.length);
+
+        if(JWTPoints?.length !== 3 || tokenNameBrowser !== 'session_app'){
+            console.log('ERRO !!!!!!');
+            return res.redirect('/login');
+        }
+
+        try{
+            const verifyJWT = jwt.verify(JWT as string, "" + process.env.JWT_HASH);
+            console.log('verifyJWT:', verifyJWT);
+
+            req.login = verifyJWT
+
+            if(verifyJWT){
+                next();
+            }
+        }
+        catch(error){
+            console.log(error);
+            res.redirect('/login');
+        }
+    }
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){

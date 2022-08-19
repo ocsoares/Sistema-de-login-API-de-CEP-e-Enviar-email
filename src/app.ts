@@ -43,6 +43,12 @@ AppDataSource.initialize().then(() => {
 
     const __dirname = path.resolve();
 
+    server.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+        res.header("Access-Control-Allow-Credentials", true as any);
+        next();
+      });
+
     server.set("trust proxy", 1);   
     
     server.use(cors())
