@@ -120,6 +120,8 @@ export class HTMLAccountController {
 
             });
 
+            req.headers.any = finalLogin as any
+
             console.log('req headers:', req.headers.cookie)
             console.log('JWTToCookie:', JWTToCookie);
             console.log('APENAS req.cookies', req.cookies) // NAO funciona <<<
