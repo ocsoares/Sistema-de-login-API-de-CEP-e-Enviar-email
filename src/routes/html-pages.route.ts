@@ -37,7 +37,11 @@ htmlPageRoute.use(session({
     httpOnly: true, // true = IMPEDE que o Usuário MODIFIQUE o Cookie MANUALMENTE ( + Seguro !! ) !! <<
 }))
 
-htmlPageRoute.use(bodyParser.urlencoded({extended: false})) // Permite pegar o req.body do Input do Usuário !! <
+htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o req.body do Input do Usuário !! <
+
+htmlPageRoute.use(bodyParser.json());
+
+htmlPageRoute.use(bodyParser.text({ type: 'text/json' }))
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
@@ -67,6 +71,8 @@ htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
     if(req.session || req.headers.cookie){
+        console.log('REQ BODY:', req.body);
+        console.log('req body no dashboard::', req.body.teste);
         console.log('req session login', req.session?.login)
         console.log('req header cookies', req.headers.cookie);
         console.log('req headers any:', req.headers.any);

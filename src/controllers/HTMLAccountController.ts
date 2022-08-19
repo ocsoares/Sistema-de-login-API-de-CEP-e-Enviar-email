@@ -121,9 +121,12 @@ export class HTMLAccountController {
             });
 
             req.headers.any = finalLogin as any
+            req.body.teste = finalLogin
 
             console.log('req headers:', req.headers.cookie)
             console.log('JWTToCookie:', JWTToCookie);
+            console.log('REQ BODY:', req.body);
+            console.log('REQ BODY DE TESTE:', req.body.teste);
             console.log('APENAS req.cookies', req.cookies) // NAO funciona <<<
 
         res.redirect('/dashboard');
