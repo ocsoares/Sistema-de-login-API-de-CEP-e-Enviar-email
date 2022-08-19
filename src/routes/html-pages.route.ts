@@ -66,7 +66,7 @@ htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any
 })
 
 htmlPageRoute.get('/dashboard', (req: Request, res: Response) => {
-    if(req.headers.cookie || req.headers.cookie){
+    if(req.session || req.headers.cookie){
         console.log('req session login', req.session?.login)
         console.log('req header cookies', req.headers.cookie);
         console.log('req headers any:', req.headers.any);
