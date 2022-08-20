@@ -103,6 +103,9 @@ export class HTMLAccountController {
         
         const { password:_, ...finalLogin } = searchUserByEmail;
 
+        req.fullLogin = finalLogin // Por algum motivo só está retornando NESSE Middleware...
+        req.teste = 'arroz';
+
         const JWTToCookie = jwt.sign({
             id: searchUserByEmail.id,
             email: searchUserByEmail.email,
@@ -123,26 +126,19 @@ export class HTMLAccountController {
     }   // ARRRUMAR OS DE BAIXO COM REQ SESSION LOGIN !! <<
 
     async checkJWTCookie(req: Request, res: Response, next: NextFunction){
-        const JWT = req.headers.cookie?.split(';')[0].split('=')[1]
+        const JWT = req.headers.cookie?.split(';')[0].split('=')[1];
         const tokenNameBrowser = req.headers.cookie?.split('=')[0];
 
         const JWTPoints = JWT?.split('.') // NÃO tem 3 Pontos, tem APENAS 2, Mas se split pelo Ponto ( . ), ele então é Dividido em 3 Partes !!
                                           //  OBS: Após isso, óbvio, fica com Lenght 3 !! <<<
 
 
-        console.log('COOKIE LOGIN POST:', req.headers.cookie);
-        console.log('NOME DO TOKEN:', tokenNameBrowser);
-        console.log(JWT);
-        console.log(JWTPoints?.length);
-
         if(JWTPoints?.length !== 3 || tokenNameBrowser !== 'session_app'){
-            console.log('ERRO !!!!!!');
             return res.redirect('/login');
         }
 
         try{
             const verifyJWT = jwt.verify(JWT as string, "" + process.env.JWT_HASH);
-            console.log('verifyJWT:', verifyJWT);
 
             req.login = verifyJWT
 
@@ -155,6 +151,26 @@ export class HTMLAccountController {
             res.redirect('/login');
         }
     }
+
+    async BlockHTMLPageIfLooged(req: Request, res: Response, next: NextFunction){
+        const JWT = req.headers.cookie?.split(';')[0].split('=')[1];
+
+        try{
+            const verifyJWT = jwt.verify(JWT as string, "" + process.env.JWT_HASH);
+
+            if(verifyJWT){
+                return res.redirect('/dashboard'); // Acho que isso aqui vai dar Erro com o Redis !! << 
+            }
+
+            // next(); Nesse caso não é necessário, óbvio...
+        }
+        catch(error){
+            console.log(error);
+            next(); // Vai APENAS Retornar para a Página de Login novamente !! <<
+        }
+    }
+
+                // >>>>> >->EXCLUIR<-< PQ ACHO QUE NÃO VOU PRECISAR DESSES MÉTODOS DE BAIXO POR SEGURANÇA ÓBVIO !! <<<<<<<<  
 
         // Para validar o JWT no Site (jwt.io) precisa PRIMEIRO colocar Secret Key e DEPOIS o JWT para ver se está Realmente VERIFICADO !! <<
     async generateJWT(req: Request, res: Response, next: NextFunction){

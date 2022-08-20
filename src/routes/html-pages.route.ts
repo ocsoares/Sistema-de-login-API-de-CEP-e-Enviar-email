@@ -29,6 +29,8 @@ const htmlPageRoute = Router();
 
 // Pelo o que eu entendi, um Request só é válido QUANDO usado na Função OU NO MIDDLEWARE !! <<<<<
 
+// >>>>> FAZER UM HTML para o Erro no Register e Procurar/Aplicar Redis para BlackList de JWT (Bloquear se fizer Logout) !! <<<<<<<<
+
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
     name: 'session_app',    // <- O name PADRÃO é session !! <<  
@@ -57,38 +59,22 @@ htmlPageRoute.post('/register', new HTMLAccountController().createAccountHTML as
     res.sendFile(registerSuccessufullHTML);
 })
 
-htmlPageRoute.get('/login', (req: Request, res: Response) => {
-    // if(req.headers.cookie){
-        // res.redirect('/dashboard');
-    // }
-    // else{
+htmlPageRoute.get('/login', new HTMLAccountController().BlockHTMLPageIfLooged, (req: Request, res: Response) => {
         res.sendFile(loginHTML);
-    // }
 })
         // >> IMPORTANTE: Mesmo que NÃO utilize o req e o res, TEM que colocar SENÃO (ao menos no .post) DÁ ERRO !! <<
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
 })
 
-htmlPageRoute.get('/dashboard', new HTMLAccountController().checkJWTCookie,  (req: Request, res: Response) => {
-    // if(req.headers.cookie){
-        // console.log('REQ SeSSION:', req.session);
-        // console.log('req header cookies', req.headers.cookie);
-        // console.log('REQ BODY:', req.body);
-        // console.log('req body no dashboard::', req.body.teste);
-        // console.log('req session login', req.session?.login)
-        // console.log('req headers any:', req.headers.any);
-        console.log('req login no Dash', req.login);
+htmlPageRoute.get('/dashboard', bodyParser.urlencoded(), new HTMLAccountController().checkJWTCookie,  (req: Request, res: Response) => {
+        console.log('FULL LOGIN:', req.body);
+        console.log('REQ TESTE:', req.teste);
         res.sendFile(dashboardHTML);
-    // }
-    // else{
-        // res.redirect('/login');
-    // }
 })
 
     // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
 htmlPageRoute.get('/logout', (req: Request, res: Response) => {
     if(req.headers.cookie){
-        console.log('COOKIE NO LOGOUT:', req.headers.cookie);
         res.clearCookie('session_app'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
         res.sendFile(logoutHTML);
         
@@ -114,7 +100,7 @@ htmlPageRoute.get('/email', new HTMLAccountController().checkJWTCookie, (req: Re
 htmlPageRoute.get('/cep', new HTMLAccountController().checkJWTCookie, runAxios(), (req: Request, res: Response) => {
 })
 
-    // >>>>> ACHO QUE NÃO VOU PRECISAR DESSAS ROTAS PRA BAIXO, POR SEGURANÇA, ÓBVIO !! <<<<<<<<   
+    // >>>>> >->EXCLUIR<-< PQ ACHO QUE NÃO VOU PRECISAR DESSAS ROTAS PRA BAIXO, POR SEGURANÇA, ÓBVIO !! <<<<<<<<   
 
     // Tive que usar um Middleware porque com req.jwt na ROTA estava dando Undefined !!! <<<
 htmlPageRoute.get('/token', new HTMLAccountController().generateJWT, (req: Request, res: Response) => {

@@ -4,5 +4,7 @@
 declare namespace Express {
     interface Request {
       login: any 
+      fullLogin: any
+      teste: any
     }
   }

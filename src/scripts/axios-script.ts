@@ -34,7 +34,7 @@ export const runAxios = () => async (req: Request, res: Response, next: NextFunc
                    return res.json({message: 'CEP inválido !'});
                 }
             })
-            .catch(error => console.log(`Erro na aplicaçãooo: ${error}`));
+            .catch(error => console.log(`Erro na aplicação: ${error}`));
         
         next();
 }
