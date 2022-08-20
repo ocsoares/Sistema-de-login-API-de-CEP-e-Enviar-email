@@ -29,11 +29,15 @@ const htmlPageRoute = Router();
 
 // Pelo o que eu entendi, um Request só é válido QUANDO usado na Função OU NO MIDDLEWARE !! <<<<<
 
-// >>>>> FAZER UM HTML para o Erro no Register e Procurar/Aplicar Redis para BlackList de JWT (Bloquear se fizer Logout) !! <<<<<<<<
+// >>>>> FAZER UM HTML para o Erro no Register !! <<<<<<<<
 
 // Verificar se o Nodemailer tá funcionando no Deploy !! <<
 
 // >>> FAZER um Sistema simples para Cadastrar/Deletar Tópicos (igual em um Blog) !! <<<<<
+
+// Procurar/Aplicar Redis para BlackList de JWT (Bloquear se fizer Logout)
+
+// Trocar os Erros de Registro por alguma mensagem de HTML para Evitar que a Aplicação FIQUE OFF !! << 
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
