@@ -13,7 +13,8 @@ export const sendNodemailer = () => (req: Request, res: Response, next: NextFunc
         auth: {
             user: 'wqszp12@gmail.com', // Email que vai ENVIAR um email !! <<
             pass: process.env.NODEMAILER_PASS // NESSE CASO, com Gmail, precisa CRIAR uma Senha PRÓPRIA para Programas de Terceiros !! <<
-        }
+        },
+        tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } as any : false
     });
 
     newTransport.sendMail({
