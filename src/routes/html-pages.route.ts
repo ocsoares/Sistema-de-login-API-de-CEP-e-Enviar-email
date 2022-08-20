@@ -31,6 +31,10 @@ const htmlPageRoute = Router();
 
 // >>>>> FAZER UM HTML para o Erro no Register e Procurar/Aplicar Redis para BlackList de JWT (Bloquear se fizer Logout) !! <<<<<<<<
 
+// Verificar se o Nodemailer tá funcionando no Deploy !! <<
+
+// >>> FAZER um Sistema simples para Cadastrar/Deletar Tópicos (igual em um Blog) !! <<<<<
+
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
     name: 'session_app',    // <- O name PADRÃO é session !! <<  
