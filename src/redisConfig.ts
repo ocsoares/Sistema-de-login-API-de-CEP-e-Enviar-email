@@ -19,14 +19,14 @@ const redisClient = new Redis({
     password: process.env.REDIS_PASS
 })
 
-if(!process.env.NODE_ENV){
-    redisClient.on('connect', () => {
-        return console.log('Redis conectado !');
-    })
+// if(!process.env.NODE_ENV){
+//     redisClient.on('connect', () => {
+//         return console.log('Redis conectado !');
+//     })
     
-    redisClient.on('error', (error) => {
-        return console.log(error.message);
-    })
-}
+//     redisClient.on('error', (error) => {
+//         return console.log(error.message);
+//     })
+// }
 
 export { redisClient };
