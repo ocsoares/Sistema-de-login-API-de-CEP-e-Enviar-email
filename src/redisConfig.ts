@@ -11,22 +11,20 @@ import 'dotenv/config'
 // MONITOR = Permite ver em Tempo REAL o Funcionamento dos Caches 
 // KEYS * = Mostra TODAS as CHAVES Cacheadas
 
-const redisClient = new Redis({
-    password: process.env.REDIS_PASS
-})
-
 if(process.env.NODE_ENV === 'production'){
     console.log('Redis desabilitado no Heroku (Colocarei mais a frente...)');
 }
 
-else{
-    redisClient.on('connect', () => {
-        console.log('Redis conectado !');
-    })
-    
-    redisClient.on('error', (error) => {
-        console.log(error.message);
-    })
-}
+const redisClient = new Redis({
+    password: process.env.REDIS_PASS
+})
+
+redisClient.on('connect', () => {
+    return console.log('Redis conectado !');
+})
+
+redisClient.on('error', (error) => {
+    return console.log(error.message);
+})
 
 export { redisClient };
