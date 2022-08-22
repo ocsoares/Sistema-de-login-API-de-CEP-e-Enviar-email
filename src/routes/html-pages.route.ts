@@ -1,17 +1,17 @@
-import { Request, Response, Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import path from "path";
 import session from 'cookie-session'
 import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
 import { sendNodemailer } from "../scripts/nodemailer-script";
+import { redisClient } from "../redisConfig";
 
 const __dirname = path.resolve()
 const registerHTML = path.join(__dirname, '/src/html/register.html'); 
 const registerSuccessufullHTML = path.join(__dirname, '/src/html/registerSuccessufull.html'); 
 const loginHTML = path.join(__dirname, '/src/html/login.html');
 const homeHTML = path.join(__dirname, '/src/html/home.html');
-const logoutHTML = path.join(__dirname, '/src/html/logout.html');
 const dashboardHTML = path.join(__dirname, '/src/html/dashboard.html');
 
 const htmlPageRoute = Router();
@@ -55,6 +55,8 @@ htmlPageRoute.use(bodyParser.json());
 
 htmlPageRoute.use(bodyParser.text({ type: 'text/json' }));
 
+htmlPageRoute.use(new HTMLAccountController().teste); // ÚNICA FORMA que achei do Request NÃO ser Inválido !! <<
+
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
 })
@@ -74,30 +76,14 @@ htmlPageRoute.get('/login', new HTMLAccountController().BlockHTMLPageIfLooged, (
 htmlPageRoute.post('/login', new HTMLAccountController().loginAccountHTML as any, (req: Request, res: Response) => {
 })
 
-htmlPageRoute.get('/dashboard', bodyParser.urlencoded(), new HTMLAccountController().checkJWTCookie,  (req: Request, res: Response) => {
-        console.log('FULL LOGIN:', req.body);
-        console.log('REQ TESTE:', req.teste);
+htmlPageRoute.get('/dashboard', new HTMLAccountController().checkJWTCookie,  (req: Request, res: Response, next: NextFunction) => {
         res.sendFile(dashboardHTML);
 })
 
-    // Realmente destrói a Sessão, MAS a Primeira vez nessa Rota dá o erro Internal Server Erro (mas Destrói), a partir da Segunda vai Normalmente !! <<
-htmlPageRoute.get('/logout', (req: Request, res: Response) => {
-    if(req.headers.cookie){
-        res.clearCookie('session_app'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
-        res.sendFile(logoutHTML);
-        
-        setInterval(() => { // Coloquei isso aqui porque o res.sendFile é ASSÍNCRONO, e o res.end é SÍNCRONO, então Sempre Executava res.end ANTES do res.sendFile e bugava !! <<<
-            res.end() // Impede que qualquer OUTRO dado seja escrito (pelo oq entendi...)
-        }, 25)
-        
-    }
-
-    else{
-        res.redirect('/');
-    }
-
+htmlPageRoute.get('/logout', new HTMLAccountController().checkJWTCookie, new HTMLAccountController().logoutAccountHTML, (req: Request, res: Response) => {
 })
 
+    // Nesse caso o req.login FUNCIONOU porque está com o MIDDLEWARE que ele foi Definido !! <<
 htmlPageRoute.get('/email', new HTMLAccountController().checkJWTCookie, (req: Request, res: Response) => {
     res.json({
         username: req.login.username,
@@ -106,6 +92,8 @@ htmlPageRoute.get('/email', new HTMLAccountController().checkJWTCookie, (req: Re
 })
 
 htmlPageRoute.get('/cep', new HTMLAccountController().checkJWTCookie, runAxios(), (req: Request, res: Response) => {
+    // console.log('req.login:', req.login);
+    // console.log('req.userCEP:', req.userCEP);
 })
 
     // >>>>> >->EXCLUIR<-< PQ ACHO QUE NÃO VOU PRECISAR DESSAS ROTAS PRA BAIXO, POR SEGURANÇA, ÓBVIO !! <<<<<<<<   

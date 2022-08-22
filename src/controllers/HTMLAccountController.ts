@@ -7,10 +7,12 @@ import { CPFRepository } from "../repositories/CPFRepository";
 import path from "path";
 import jwt from 'jsonwebtoken'
 import { sendNodemailer } from "../scripts/nodemailer-script";
+import { redisClient } from "../redisConfig";
 
 const __dirname = path.resolve()
 // const loggedHTML = path.join(__dirname, '/src/html/loginSuccessufull.html');
 const loginErrorHTML = path.join(__dirname, '/src/html/loginError.html');
+const logoutHTML = path.join(__dirname, '/src/html/logout.html');
 
 // >>> IMPORTANTÍSSIMO: Por algum motivo, tem DOIS Request e Response, um são do Express e o outro ACHO que é do bodyParser (NA ROTA), então NÃO ESTAVA pe-
 // -gando as Configurações do meu express.d.ts Porque Estava com o Request/Response SEM SER O DO Express !! <<<<
@@ -104,7 +106,6 @@ export class HTMLAccountController {
         const { password:_, ...finalLogin } = searchUserByEmail;
 
         req.fullLogin = finalLogin // Por algum motivo só está retornando NESSE Middleware...
-        req.teste = 'arroz';
 
         const JWTToCookie = jwt.sign({
             id: searchUserByEmail.id,
@@ -126,6 +127,7 @@ export class HTMLAccountController {
     }   // ARRRUMAR OS DE BAIXO COM REQ SESSION LOGIN !! <<
 
     async checkJWTCookie(req: Request, res: Response, next: NextFunction){
+
         const JWT = req.headers.cookie?.split(';')[0].split('=')[1];
         const tokenNameBrowser = req.headers.cookie?.split('=')[0];
 
@@ -140,16 +142,68 @@ export class HTMLAccountController {
         try{
             const verifyJWT = jwt.verify(JWT as string, "" + process.env.JWT_HASH);
 
-            req.login = verifyJWT
-
             if(verifyJWT){
+                req.login = verifyJWT
+                
+                const { id } = verifyJWT as any;
+
+                const teste = await redisClient.get(id)
+                console.log('TESTE CACHEADO:', teste);
+                
+                console.log('JWT Atual:', JWT);
+
+                // Tá dando certo, mas SÓ tá colocando no Cache o ÚLTIMO Token, quero que sejam TODOS para um MESMO ID !! <<
+                //  PESQUISAR !! <<
+
+                if(JWT === teste){ // Se for igual limpa o Cookie e Redireciona para o Login !! <<
+                    console.log('SÃO IGUAIS !!');
+                }
+
+                else{
+                    console.log('NÃO SÃO IGUAIS !!');
+                }
+
+                // if(teste){
+                //     console.log('EXISTE !');
+                //     return res.redirect('/login');
+                // }
+
+                if(!id) throw new InternalServerError('ID inválido !'); // Apenas para confirmar e Evitar Futuros erros...
+
+                const searchUserById = await AccountRepository.findOneBy({id})
+
+                const { password:_, ...infoUserNoPass } = searchUserById as any
+
+                req.userLogged = infoUserNoPass;
+                
                 next();
             }
         }
         catch(error){
-            console.log(error);
             res.redirect('/login');
         }
+    }
+
+    async logoutAccountHTML(req: Request, res: Response, next: NextFunction){
+            const { id } = req.userLogged
+    
+            const cookieValue = req.headers.cookie?.split('=')[1] as any
+            console.log('COOKIE VALUE:', cookieValue);
+            
+            const redisExpires = 24 * 60 * 60; // 1 day
+
+            redisClient.set(id, cookieValue, 'EX', redisExpires);
+            console.log('Cacheado !');
+    
+            res.clearCookie('session_app'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
+
+            next();
+            
+            setInterval(() => { // Coloquei isso aqui porque o res.sendFile é ASSÍNCRONO, e o res.end é SÍNCRONO, então Sempre Executava res.end ANTES do res.sendFile e bugava !! <<<
+                res.end() // Impede que qualquer OUTRO dado seja escrito (pelo oq entendi...)
+            }, 25)
+            
+            return res.sendFile(logoutHTML);
     }
 
     async BlockHTMLPageIfLooged(req: Request, res: Response, next: NextFunction){
@@ -165,7 +219,6 @@ export class HTMLAccountController {
             // next(); Nesse caso não é necessário, óbvio...
         }
         catch(error){
-            console.log(error);
             next(); // Vai APENAS Retornar para a Página de Login novamente !! <<
         }
     }
@@ -242,5 +295,12 @@ export class HTMLAccountController {
         if(searchUser){
             return res.json({testekkkk: searchUser});
         }
+    }
+
+        // APAGAR DPS !! <<
+    async teste(req: Request, res: Response, next: NextFunction){
+        req.teste = 'feijao kkkk';
+
+        next();
     }
 }

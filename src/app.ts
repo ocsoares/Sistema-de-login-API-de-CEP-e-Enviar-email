@@ -67,7 +67,7 @@ AppDataSource.initialize().then(() => {
     server.use(checkStatusRoute);
     // server.use(crudRoute); POR ENQUANTO vou deixar isso Comentado, porque irei mexer APENAS com a Rota de HTML !! <<
 
-    server.use(errorMiddleware);
+    // server.use(errorMiddleware);
 
     return server.listen(process.env.PORT || port, () => {
         if(process.env.NODE_ENV === 'production'){

@@ -6,5 +6,7 @@ declare namespace Express {
       login: any 
       fullLogin: any
       teste: any
+      userLogged: any
+      axios: string | object
     }
   }
