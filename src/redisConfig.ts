@@ -7,6 +7,10 @@ import 'dotenv/config'
 
 // TEM QUE Transformar os dados do Cache em STRING !! << 
 
+// Comandos do redis-cli !! <<
+// MONITOR = Permite ver em Tempo REAL o Funcionamento dos Caches 
+// KEYS * = Mostra TODAS as CHAVES Cacheadas
+
 const redisClient = new Redis({
     password: process.env.REDIS_PASS
 })
@@ -18,5 +22,7 @@ redisClient.on('connect', () => {
 redisClient.on('error', (error) => {
     console.log(error.message);
 })
+
+console.log('HEROKU REDIS:', process.env.REDIS_URL);
 
 export { redisClient };

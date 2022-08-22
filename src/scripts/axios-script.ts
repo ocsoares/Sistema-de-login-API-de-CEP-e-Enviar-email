@@ -29,7 +29,6 @@ export const runAxios = () => async (req: Request, res: Response, next: NextFunc
 
         if(isCached){ 
             console.log('CACHE JÁ EXISTE !');
-            console.log('CONTEUDO:', JSON.parse(isCached));
             console.timeEnd();
 
                 // Como foi Cacheado em String (PRECISA ser), agora Precisa VOLTAR para JSON !! <<
@@ -41,8 +40,7 @@ export const runAxios = () => async (req: Request, res: Response, next: NextFunc
                 const { ...getAllData } = resAxios.data // Pegando TUDO do res.data nessa ...Variável <<<  
                 
                 // req.axios = resAxios.data
-                // console.log('FODASE', req.axios)
-                
+                                
                 const checkErrorAPI = getAllData.hasOwnProperty('erro');
                 
                 if (!checkErrorAPI) {
@@ -54,7 +52,7 @@ export const runAxios = () => async (req: Request, res: Response, next: NextFunc
                    return res.json({message: 'CEP inválido !'});
                 }
             })
-            .catch(error => console.log(`Erro na aplicação: ${error}`));
+            .catch(error => res.json(error));
 
             console.log('CACHE NÃO EXISTE !!');
 

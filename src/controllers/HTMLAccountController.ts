@@ -147,30 +147,23 @@ export class HTMLAccountController {
                 
                 const { id } = verifyJWT as any;
 
-                const teste = await redisClient.get(id)
-                console.log('TESTE CACHEADO:', teste);
+                const getBlackListJWT = await redisClient.get(`blackListJWT_${JWT}`);
                 
-                console.log('JWT Atual:', JWT);
-
-                // Tá dando certo, mas SÓ tá colocando no Cache o ÚLTIMO Token, quero que sejam TODOS para um MESMO ID !! <<
-                //  PESQUISAR !! <<
-
-                if(JWT === teste){ // Se for igual limpa o Cookie e Redireciona para o Login !! <<
-                    console.log('SÃO IGUAIS !!');
+                if(JWT === getBlackListJWT as any){ // Se for igual limpa o Cookie e Redireciona para o Login !! <<
+                    console.log('Está na Blacklist !!');
+                    res.clearCookie('session_app');
+                    return res.redirect('/login');
                 }
 
                 else{
-                    console.log('NÃO SÃO IGUAIS !!');
+                    console.log('NÃO está na Blacklist !!');
                 }
-
-                // if(teste){
-                //     console.log('EXISTE !');
-                //     return res.redirect('/login');
-                // }
 
                 if(!id) throw new InternalServerError('ID inválido !'); // Apenas para confirmar e Evitar Futuros erros...
 
                 const searchUserById = await AccountRepository.findOneBy({id})
+
+                if(!searchUserById) throw new InternalServerError('Usuário inválido !');
 
                 const { password:_, ...infoUserNoPass } = searchUserById as any
 
@@ -180,6 +173,7 @@ export class HTMLAccountController {
             }
         }
         catch(error){
+            res.clearCookie('session_app');
             res.redirect('/login');
         }
     }
@@ -187,12 +181,11 @@ export class HTMLAccountController {
     async logoutAccountHTML(req: Request, res: Response, next: NextFunction){
             const { id } = req.userLogged
     
-            const cookieValue = req.headers.cookie?.split('=')[1] as any
-            console.log('COOKIE VALUE:', cookieValue);
+            const JWT = req.headers.cookie?.split('=')[1] as any
             
             const redisExpires = 24 * 60 * 60; // 1 day
 
-            redisClient.set(id, cookieValue, 'EX', redisExpires);
+            await redisClient.set(`blackListJWT_${JWT}`, JWT, 'EX', redisExpires);
             console.log('Cacheado !');
     
             res.clearCookie('session_app'); // Limpando o cookie com o nome PADRÃO que eu Criei acima !! <<
