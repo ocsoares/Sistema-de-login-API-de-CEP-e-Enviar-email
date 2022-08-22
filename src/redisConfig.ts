@@ -15,14 +15,18 @@ const redisClient = new Redis({
     password: process.env.REDIS_PASS
 })
 
-redisClient.on('connect', () => {
-    console.log('Redis conectado !');
-})
+if(process.env.NODE_ENV === 'production'){
+    console.log('Redis desabilitado no Heroku (Colocarei mais a frente...)');
+}
 
-redisClient.on('error', (error) => {
-    console.log(error.message);
-})
-
-console.log('HEROKU REDIS:', process.env.REDIS_URL);
+else{
+    redisClient.on('connect', () => {
+        console.log('Redis conectado !');
+    })
+    
+    redisClient.on('error', (error) => {
+        console.log(error.message);
+    })
+}
 
 export { redisClient };
