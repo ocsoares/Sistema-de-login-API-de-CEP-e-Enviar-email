@@ -9,18 +9,11 @@ import { DataSource } from 'typeorm'
 
 export const AppDataSource = new DataSource({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
-
-    // host:  process.env.DB_HOST,
-    // port:  Number(process.env.DB_PORT),
-    // username: process.env.DB_USER,
-    // password: process.env.DB_PASS,
-    // database: process.env.DB_NAME,
+    url: process.env.DATABASE_URL, // Credenciais
 
     entities: [`${__dirname}/**/entity/*.{ts,js}`],
     migrations: [`${__dirname}/**/migration/*.{ts,js}`],
-
-
+    
         // Isso aqui permite Acessar LOCALMENTE e REMOTAMENTE, de acordo com o .env NODE_ENV !!
         // O NODE_ENV Apenas existe no HEROKU (Remoto) e Retorna production, no localhost NÃO EXISTE !! <<
     ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false

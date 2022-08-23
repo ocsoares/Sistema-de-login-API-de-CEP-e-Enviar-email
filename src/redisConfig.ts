@@ -13,7 +13,7 @@ import 'dotenv/config'
 
 
 const redisClient = new Redis(process.env.REDIS_TLS_URL as any || 'localhost', {
-    password: undefined || process.env.REDIS_PASS,
+    password: undefined || process.env.REDIS_PASS, // REDIS_PASS = Senha local
     tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } as any : false 
 });
 
