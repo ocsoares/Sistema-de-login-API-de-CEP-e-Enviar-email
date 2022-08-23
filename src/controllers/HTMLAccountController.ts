@@ -13,6 +13,7 @@ const __dirname = path.resolve()
 // const loggedHTML = path.join(__dirname, '/src/html/loginSuccessufull.html');
 const loginErrorHTML = path.join(__dirname, '/src/html/loginError.html');
 const logoutHTML = path.join(__dirname, '/src/html/logout.html');
+const registerHTML = path.join(__dirname, '/src/html/register.html'); 
 
 // >>> IMPORTANTÍSSIMO: Por algum motivo, tem DOIS Request e Response, um são do Express e o outro ACHO que é do bodyParser (NA ROTA), então NÃO ESTAVA pe-
 // -gando as Configurações do meu express.d.ts Porque Estava com o Request/Response SEM SER O DO Express !! <<<<
@@ -24,42 +25,81 @@ export class HTMLAccountController {
 
         const { username, email, cpf, cep, password, passwordConfirmation } = reqBody // O NOME dessas Variáveis são definidas em name="..." no HTML !! <<< 
 
-        if(!username || !email || !cpf || !cep || !password) throw new BadRequestError('Dados inválidos !');
-        if(typeof(username) !== 'string' || typeof(email) !== 'string' || typeof(cpf) !== 'string' || typeof(cep) !== 'string' || typeof(password) !== 'string') throw new BadRequestError('Dados inválidos !');
+        if(!username || !email || !cpf || !cep || !password){
+            console.log('Dados inválidos !');
+            return res.sendFile(registerHTML);
+        }
+
+
+        if(typeof(username) !== 'string' || typeof(email) !== 'string' || typeof(cpf) !== 'string' || typeof(cep) !== 'string' || typeof(password) !== 'string'){
+            console.log('Dados inválidos !');
+            return res.sendFile(registerHTML);
+        }
+        
 
         const usernameRegex = /[a-zA-Z\u00C0-\u00FF ]+/i
-        if(!username.match(usernameRegex)) throw new BadRequestError ('Usuário inválido !');
+        if(!username.match(usernameRegex)){
+            console.log('Usuário inválido !');
+            return res.sendFile(registerHTML);
+        }
 
         const validateEmail = (mail: any) => {
             return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail));
         }
-        if(!validateEmail(email)) throw new BadRequestError('Email inválido !');
+        if(!validateEmail(email)){
+            console.log('Email inválido !');
+            return res.sendFile(registerHTML);
+        }
 
         const CPFRegex = /[0-9]/;
-        if(!cpf.match(CPFRegex)) throw new BadRequestError('CPF inválido !');
+        if(!cpf.match(CPFRegex)){
+            console.log('CPF inválido !');
+            return res.sendFile(registerHTML);
+        }
 
         const CEPRegex = /[0-9]/; // APENAS Números !! <<
-        if(!cep.match(CEPRegex)) throw new BadRequestError('CEP inválido !');
+        if(!cep.match(CEPRegex)){
+            console.log('CEP inválido !');
+            return res.sendFile(registerHTML);
+        }
 
-        if(passwordConfirmation !== password) throw new BadRequestError('As senhas não coincidem !');
+        if(passwordConfirmation !== password){
+            console.log('As senhas não coincidem !');
+            return res.sendFile(registerHTML);
+        }
 
         const searchUsername = await AccountRepository.findOneBy({username});
-        if(searchUsername) throw new BadRequestError('Usuário existente !');
+        if(searchUsername){
+            console.log('Usuário existente !');
+            return res.sendFile(registerHTML);
+        }
 
         const searchUserByEmail = await AccountRepository.findOneBy({email});
-        if(searchUserByEmail) throw new BadRequestError('Email existente !');
+        if(searchUserByEmail){
+            console.log('Email existente !');
+            return res.sendFile(registerHTML);
+        }
 
         const searchCEP = await AccountRepository.findOneBy({cep});
-        if(searchCEP) throw new BadRequestError('CEP existente !');
+        if(searchCEP){
+            console.log('CEP existente !');
+            return res.sendFile(registerHTML);
+        }
 
         // ACHO que pode ter a MESMA SENHA no Banco de Dados, então NÃO verifiquei !! <<
 
         const searchCPF = await CPFRepository.findOneBy({cpf});
-        if(searchCPF) throw new BadRequestError('CPF existente !');
+        if(searchCPF){
+            console.log('CPF existente !');
+            return res.sendFile(registerHTML);
+        }
 
         const encryptPassword = await bcrypt.hash(password, 10);
 
-        if(!encryptPassword) throw new InternalServerError();
+        if(!encryptPassword){
+            console.log('Erro na encriptação da senha !');
+            return res.sendFile(registerHTML);
+        }
 
         const saveAccountHTML = AccountRepository.create({
             username,
