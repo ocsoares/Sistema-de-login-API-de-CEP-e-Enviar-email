@@ -12,21 +12,26 @@ import 'dotenv/config'
 // KEYS * = Mostra TODAS as CHAVES Cacheadas
 
 if(process.env.NODE_ENV === 'production'){
+    const redisClient = new Redis({
+
+    })
+
     console.log('Redis desabilitado no Heroku (Colocarei mais a frente...)');
+
 }
 
-const redisClient = new Redis({
-    password: process.env.REDIS_PASS
+const redisClient = new Redis(process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : 'localhost' as any, {
+    password: process.env.NODE_ENV === 'production' ? false : process.env.REDIS_PASS as any,
+
+    tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false as any
 })
 
-// if(!process.env.NODE_ENV){
-//     redisClient.on('connect', () => {
-//         return console.log('Redis conectado !');
-//     })
-    
-//     redisClient.on('error', (error) => {
-//         return console.log(error.message);
-//     })
-// }
+redisClient.on('connect', () => {
+    return console.log('Redis conectado !');
+})
+
+redisClient.on('error', (error) => {
+    return console.log(error.message);
+})
 
 export { redisClient };

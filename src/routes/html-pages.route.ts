@@ -5,7 +5,6 @@ import bodyParser from "body-parser";
 import { HTMLAccountController } from "../controllers/HTMLAccountController";
 import { runAxios } from "../scripts/axios-script";
 import { sendNodemailer } from "../scripts/nodemailer-script";
-import { redisClient } from "../redisConfig";
 
 const __dirname = path.resolve()
 const registerHTML = path.join(__dirname, '/src/html/register.html'); 
