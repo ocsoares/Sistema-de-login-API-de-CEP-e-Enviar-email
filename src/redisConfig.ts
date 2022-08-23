@@ -11,27 +11,30 @@ import 'dotenv/config'
 // MONITOR = Permite ver em Tempo REAL o Funcionamento dos Caches 
 // KEYS * = Mostra TODAS as CHAVES Cacheadas
 
-if(process.env.NODE_ENV === 'production'){
-    const redisClient = new Redis({
 
-    })
+const redisClient = new Redis(process.env.REDIS_URL as any, {
+    tls: {
+        rejectUnauthorized: false
+    }
+});
 
-    console.log('Redis desabilitado no Heroku (Colocarei mais a frente...)');
 
-}
+// const redisClient = new Redis(process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : 'localhost' as any, {
+//     password: process.env.NODE_ENV === 'production' ? false : process.env.REDIS_PASS as any,
 
-const redisClient = new Redis(process.env.NODE_ENV === 'production' ? process.env.REDIS_URL : 'localhost' as any, {
-    password: process.env.NODE_ENV === 'production' ? false : process.env.REDIS_PASS as any,
-
-    tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false as any
-})
+//     tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false as any
+// })
 
 redisClient.on('connect', () => {
-    return console.log('Redis conectado !');
+    console.log('Redis conectado !');
+
+    if(process.env.NODE_ENV === 'production'){
+        console.log('Conectado remotamente no Redis do Heroku !');
+    }
 })
 
 redisClient.on('error', (error) => {
-    return console.log(error.message);
+    console.log(error.message);
 })
 
 export { redisClient };
