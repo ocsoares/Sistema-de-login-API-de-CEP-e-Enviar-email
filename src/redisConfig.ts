@@ -12,10 +12,9 @@ import 'dotenv/config'
 // KEYS * = Mostra TODAS as CHAVES Cacheadas
 
 
-const redisClient = new Redis(process.env.REDIS_TLS_URL as any, {
-    tls: {
-        rejectUnauthorized: false
-    }
+const redisClient = new Redis(process.env.REDIS_TLS_URL as any || 'localhost', {
+    password: undefined || process.env.REDIS_PASS,
+    tls: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } as any : false 
 });
 
 
