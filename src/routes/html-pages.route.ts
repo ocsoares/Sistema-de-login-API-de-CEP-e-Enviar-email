@@ -20,23 +20,11 @@ const htmlPageRoute = Router();
 
 // Procurar sobre views (EJS, engine) DEPOIS !! <<
 
-// VER SE NO HEROKU ESTÁ FUNCIONANDO O NODEMAILER !! <<<<<
-
 // Se eu não conseguir usar os Cookies, usar JWT no lugar deles e Procurar se é uma boa prática !! <<
 
 // Pesquisar sobre Criptografia em JWT !! <<
 
-// Pelo o que eu entendi, um Request só é válido QUANDO usado na Função OU NO MIDDLEWARE !! <<<<<
-
-// >>>>> FAZER UM HTML para o Erro no Register !! <<<<<<<<
-
-// Verificar se o Nodemailer tá funcionando no Deploy !! <<
-
 // >>> FAZER um Sistema simples para Cadastrar/Deletar Tópicos (igual em um Blog) !! <<<<<
-
-// Procurar/Aplicar Redis para BlackList de JWT (Bloquear se fizer Logout)
-
-// Trocar os Erros de Registro por alguma mensagem de HTML para Evitar que a Aplicação FIQUE OFF !! << 
 
     // Tive que mudar de session para cookie-session por causa do Heroku, e por isso, tive que Mudar os req.session... !! <<
 htmlPageRoute.use(session({
@@ -53,8 +41,6 @@ htmlPageRoute.use(bodyParser.urlencoded({extended: true})) // Permite pegar o re
 htmlPageRoute.use(bodyParser.json());
 
 htmlPageRoute.use(bodyParser.text({ type: 'text/json' }));
-
-htmlPageRoute.use(new HTMLAccountController().teste); // ÚNICA FORMA que achei do Request NÃO ser Inválido !! <<
 
 htmlPageRoute.get('/', (req: Request, res: Response) => {
     res.sendFile(homeHTML);
@@ -93,19 +79,6 @@ htmlPageRoute.get('/email', new HTMLAccountController().checkJWTCookie, (req: Re
 htmlPageRoute.get('/cep', new HTMLAccountController().checkJWTCookie, runAxios(), (req: Request, res: Response) => {
     // console.log('req.login:', req.login);
     // console.log('req.userCEP:', req.userCEP);
-})
-
-    // >>>>> >->EXCLUIR<-< PQ ACHO QUE NÃO VOU PRECISAR DESSAS ROTAS PRA BAIXO, POR SEGURANÇA, ÓBVIO !! <<<<<<<<   
-
-    // Tive que usar um Middleware porque com req.jwt na ROTA estava dando Undefined !!! <<<
-htmlPageRoute.get('/token', new HTMLAccountController().generateJWT, (req: Request, res: Response) => {
-})
-
-htmlPageRoute.get('/verifytoken/:JWTObject', new HTMLAccountController().verifyJWT, (req: Request, res: Response) => {
-})
-
-    // EXCLUIR depois...
-htmlPageRoute.get('/data', new HTMLAccountController().onlyReturnData, (req: Request, res: Response) => {
 })
 
 export default htmlPageRoute;
