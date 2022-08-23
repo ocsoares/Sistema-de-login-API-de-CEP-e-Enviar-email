@@ -12,10 +12,13 @@ O projeto consiste em um **sistema de cadastro e login**, com verificações par
 **Observação**: o projeto foi feito com a intenção de aprimorar meus conhecimentos no backend, então o front-end não foi o foco principal.
 
 ## Registro
-![Registro](https://github.com/ocsoares/Sistema-de-login-API-de-CEP-e-Enviar-email-DeployHeroku/assets/registro.jpg)
+![Registro](https://raw.githubusercontent.com/ocsoares/Sistema-de-login-API-de-CEP-e-Enviar-email-DeployHeroku/master/assets/registro.jpg)
 
 ## Login
-![Login](https://github.com/ocsoares/Sistema-de-login-API-de-CEP-e-Enviar-email-DeployHeroku/assets/login.jpg)
+![Login](https://raw.githubusercontent.com/ocsoares/Sistema-de-login-API-de-CEP-e-Enviar-email-DeployHeroku/master/assets/login.jpg)
+
+## Dashboard
+![Dashboard](https://raw.githubusercontent.com/ocsoares/Sistema-de-login-API-de-CEP-e-Enviar-email-DeployHeroku/master/assets/dashboard.jpg)
 
 # Tecnologias e Bibliotecas utilizadas
 ## Back end
